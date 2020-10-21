@@ -59,14 +59,18 @@ const useStyle = theme => ({
 });
 
 class SearchAppBar extends Component {
-
-    inputHandler = event => {
-        console.log(event.target.value);
+    constructor(props){
+        super(props);
     }
+
+    inputHandler = (event) => {
+        this.props.updateSearchTerm(event.target.value);
+    }
+
     render() {
 
         const { classes } = this.props;
-
+        
         return (
             <div className={classes.root} >
                 <AppBar position="fixed">
@@ -86,6 +90,7 @@ class SearchAppBar extends Component {
                                 }}
                                 inputProps={{ 'aria-label': 'rechercher' }}
                                 onKeyDown={this.inputHandler}
+                                onBlur={this.inputHandler}
                             />
                         </div>
                     </Toolbar>
