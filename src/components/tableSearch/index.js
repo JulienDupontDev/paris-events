@@ -28,10 +28,24 @@ const useStyles = (theme) => ({
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+const preparyQuery = (options) => {
+  "&q=&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&refine.category=Animations+-%3E+Atelier+%2F+Cours&refine.category=Animations+-%3E+Autre+animation"
+  console.log(Object.values(options))
+  // Object.values(options).forEach((option) => {
+  //   console.log(option)
+  //   console.log(`refine.category=${option.category}+-%3E${option.name}`)
+  // });
+}
+
+
+const executeQuery = (query) => {
+
+}
 
 class Sorting extends Component {
   constructor(props) {
     super(props);
+    this.baseUrl = "https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/api";
     this.state = {
       pmr: 0,
       blind: 0,
@@ -41,10 +55,18 @@ class Sorting extends Component {
       cities: [],
       places: [],
       subCategories: [],
-      userFilters: {},
+      userFilters: {
+      },
       tags: availableChoices.tags
     }
   }
+  componentDidUpdate() {
+    preparyQuery(this.state.userFilters);
+
+
+  }
+
+
 
   componentDidMount() {
 
@@ -56,6 +78,7 @@ class Sorting extends Component {
           categories: facets.filter((facet) => facet.name === 'category')[0].facets,
           types: facets.filter((facet) => facet.name.includes('type')),
           postCodes: facets.filter((facet) => facet.name === 'address_zipcode')[0].facets,
+          tags: facets.filter((facet) => facet.name === 'tags')[0].facets,
           cities: facets.filter((facet) => facet.name === 'address_city')[0].facets,
           places: facets.filter((facet) => facet.name === 'address_name')[0].facets
         }
@@ -63,8 +86,6 @@ class Sorting extends Component {
 
       console.log(Object.values(this.state.userFilters).length)
       let userfilters = { ...this.state.userFilters }
-      userfilters['test'] = "1"
-      userfilters.mom = "1"
 
       this.setState({ userFilters: userfilters });
       console.log(this.state.userFilters)
@@ -102,12 +123,8 @@ class Sorting extends Component {
               }
               )
 
+              this.setState({ subCategories: tempArray });
 
-              this.setState({ ...this.state, subCategories: tempArray })
-              // console.log(this.state.subCategories)
-
-              // this.setState({...this.state, subCategories: tempArray })
-              // console.log(this.state.subCategories)
             }
             }
             getOptionLabel={(option) => option.name}
@@ -137,10 +154,13 @@ class Sorting extends Component {
             options={this.state.subCategories}
             groupBy={(subCategory) => subCategory.category}
             disableCloseOnSelect
-            onChange={(event, values) => console.log(values)}
+            onChange={(event, values) => {
+              const userfilters = this.state.userFilters;
+              userfilters.subCategories = values;
+              this.setState({ userFilters: userfilters })
+            }}
             getOptionLabel={(subCategory) => subCategory.name}
             renderOption={(option, { selected }) => {
-              console.log(this.state.subCategories)
               return (
                 <React.Fragment>
                   <Checkbox
@@ -166,8 +186,14 @@ class Sorting extends Component {
             id="tags"
             limitTags={2}
             options={this.state.tags}
+            onChange={(event, values) => {
+              const userFilters = this.state.userFilters;
+              userFilters.tags = values;
+              console.log(userFilters)
+              this.setState({ userFilters: userFilters })
+            }}
             disableCloseOnSelect
-            getOptionLabel={(tag) => tag}
+            getOptionLabel={(tag) => tag.name}
             renderOption={(option, { selected }) => (
               <React.Fragment>
                 <Checkbox
@@ -176,7 +202,7 @@ class Sorting extends Component {
                   style={{ marginRight: 8 }}
                   checked={selected}
                 />
-                {option}
+                {option.name}
               </React.Fragment>
             )
             }
