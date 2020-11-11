@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 import './App.css';
 import SearchAppBar from './components/navbar';
 
-export default class App extends Component{
-  constructor(props){
+
+export default class App extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       searchTerm: "jznfzjn",
@@ -15,19 +16,20 @@ export default class App extends Component{
 
   updateSearchTerm = (newSearchTerm) => {
     this.setState({
-      searchTerm: newSearchTerm 
+      searchTerm: newSearchTerm
     })
   }
 
 
-  render(){
+  render() {
     const state = this.state;
-    
+
     return (
       <div className="App">
         <SearchAppBar updateSearchTerm={this.updateSearchTerm} />
         <Home searchTerm={state.searchTerm} />
       </div>
+
     );
   }
 }

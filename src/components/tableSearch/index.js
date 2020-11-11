@@ -30,7 +30,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const preparyQuery = (options) => {
   "&q=&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&refine.category=Animations+-%3E+Atelier+%2F+Cours&refine.category=Animations+-%3E+Autre+animation"
-  console.log(Object.values(options))
+  // console.log(Object.values(options))
   // Object.values(options).forEach((option) => {
   //   console.log(option)
   //   console.log(`refine.category=${option.category}+-%3E${option.name}`)
@@ -71,7 +71,7 @@ class Sorting extends Component {
   componentDidMount() {
 
     axios.get('https://opendata.paris.fr/api/records/1.0/search/?disjunctive.category=true&disjunctive.tags=true&disjunctive.address_zipcode=true&disjunctive.address_city=true&disjunctive.access_type=true&disjunctive.price_type=true&disjunctive.address_name=true&refine.category=Animations+&refine.category=Concerts+&refine.category=%C3%89v%C3%A9nements+&refine.category=Expositions+&refine.category=Spectacles+&rows=0&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&facetsort.category=alphanum&facetsort.tags=alphanum&facetsort.address_name=alphanum&facetsort.address_zipcode=alphanum&facetsort.address_city=alphanum&facetsort.access_type=alphanum&facetsort.price_type=alphanum&dataset=que-faire-a-paris-&timezone=Europe%2FBerlin&lang=fr').then((response) => {
-      console.log(response.data.facet_groups)
+      // console.log(response.data.facet_groups)
       const facets = response.data.facet_groups;
       this.setState(
         {
@@ -84,11 +84,11 @@ class Sorting extends Component {
         }
       )
 
-      console.log(Object.values(this.state.userFilters).length)
+      // console.log(Object.values(this.state.userFilters).length)
       let userfilters = { ...this.state.userFilters }
 
       this.setState({ userFilters: userfilters });
-      console.log(this.state.userFilters)
+      // console.log(this.state.userFilters)
 
     });
   }
@@ -189,7 +189,7 @@ class Sorting extends Component {
             onChange={(event, values) => {
               const userFilters = this.state.userFilters;
               userFilters.tags = values;
-              console.log(userFilters)
+              // console.log(userFilters)
               this.setState({ userFilters: userFilters })
             }}
             disableCloseOnSelect
@@ -274,7 +274,7 @@ class Sorting extends Component {
             limitTags={2}
             options={this.state.cities}
             disableCloseOnSelect
-            onChange={(event, values) => console.log(values)}
+            onChange={(event, values) => null}
             getOptionLabel={(city) => city.name}
             renderOption={(option, { selected }) => {
               return (
