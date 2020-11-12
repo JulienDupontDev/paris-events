@@ -5,6 +5,13 @@ import axios from 'axios';
 import { connect } from 'react-redux'
 import { updateResultItems } from '../../redux/actions';
 import ResultItemsList from '../resultItemsList'
+import { getResultItemsList, getNhits } from '../../redux/selectors';
+
+const mapStateToProps = state => {
+  const resultItems = getResultItemsList(state);
+  const nHits = getNhits(state);
+  return { resultItems, nHits };
+}
 
 const useStyles = (theme) => ({
   root: {
@@ -37,15 +44,22 @@ class ResultPagination extends Component {
     super(props);
     // this.state = props;
     this.state = {
-      ...this.state,
-      totalHits: 150,
-      items: [
-      ],
+      totalHits: this.props.nHits['nHits'],
       itemPage: 1
     }
-    console.log(this.props)
+    console.log(Object.values(this.props.nHits))
   }
 
+  componentDidUpdate = () => {
+    console.log(this.props);
+    if (this.state.totalHits !== Math.floor(this.props.nHits['nHits']) / 10) {
+      this.setState({ ...this.state, totalHits: Math.floor(this.props.nHits['nHits']) / 10 })
+      console.log(this.props.nHits)
+
+    }
+
+
+  }
 
   handleUpdateResultItems = async (event, page) => {
     await axios.get(`https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&q=&rows=10&start=
@@ -56,9 +70,10 @@ class ResultPagination extends Component {
       //   itemPage: page
       // })
       this.props.updateResultItems(response.data.records);
+      // console.log(response)
       this.setState({
         itemPage: page,
-        totalHits: Math.floor(response.data.nhits / 10)
+        totalHits: Math.floor(response.data.nhits / 10) + 1
       });
 
     });
@@ -71,7 +86,7 @@ class ResultPagination extends Component {
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.pagination}>
-          <Button onClick={this.handleUpdateResultItems}>Click</Button>
+          <Button onClick={() => this.setState({ totalHits: 3 })}>Click</Button>
           <Pagination showFirstButton showLastButton count={this.state.totalHits} defaultPage={1} page={this.state.itemPage} boundaryCount={2} onChange={this.handleUpdateResultItems} />
         </Grid>
         <ResultItemsList />
@@ -83,4 +98,4 @@ class ResultPagination extends Component {
   }
 }
 
-export default connect(null, { updateResultItems })(withStyles(useStyles)(ResultPagination));
+export default connect(mapStateToProps, { updateResultItems })(withStyles(useStyles)(ResultPagination));

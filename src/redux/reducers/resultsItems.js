@@ -7,10 +7,12 @@ const initialState = {
 const resultItemsReducers = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_RESULT_ITEMS:
-      const { content } = action.payload;
+      const { resultItems } = action.payload;
       return {
-        ...state,
-        resultItems: [...content]
+        // ...state,
+        resultItems: [
+          ...resultItems
+        ]
       }
     default:
       return state;

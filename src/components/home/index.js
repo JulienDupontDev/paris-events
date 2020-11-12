@@ -2,11 +2,7 @@ import Grid from '@material-ui/core/Grid';
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import axios from 'axios';
-import parisAPI from '../../api/paris';
 import Sorting from '../tableSearch';
-import EventCard from '../eventCard';
-import Iframe from 'react-iframe';
 import ResultPagination from '../pagination';
 
 const useStyle = theme => ({
@@ -15,13 +11,6 @@ const useStyle = theme => ({
   },
 
 });
-
-// const showResults = () => (
-
-//   this.state.events.length ?
-//     <div>{this.state.events}</div>
-//     : <div>Rien</div>
-// );
 
 class Home extends Component {
   constructor(props) {

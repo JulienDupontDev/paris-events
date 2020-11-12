@@ -7,6 +7,8 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Grid from '@material-ui/core/Grid';
 import { FormControl, FormControlLabel, FormGroup, Switch } from '@material-ui/core';
+import { connect } from 'react-redux'
+import { updateResultItems, updateNHits } from '../../redux/actions';
 import axios from 'axios';
 
 
@@ -28,19 +30,11 @@ const useStyles = (theme) => ({
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const preparyQuery = (options) => {
-  "&q=&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&refine.category=Animations+-%3E+Atelier+%2F+Cours&refine.category=Animations+-%3E+Autre+animation"
-  // console.log(Object.values(options))
-  // Object.values(options).forEach((option) => {
-  //   console.log(option)
-  //   console.log(`refine.category=${option.category}+-%3E${option.name}`)
-  // });
-}
 
 
-const executeQuery = (query) => {
+// const executeQuery = (query) => {
 
-}
+// }
 
 class Sorting extends Component {
   constructor(props) {
@@ -50,19 +44,20 @@ class Sorting extends Component {
       pmr: 0,
       blind: 0,
       deaf: 0,
-      categories: availableChoices.categories,
       postCodes: [],
       cities: [],
       places: [],
+      categories: [],
+      tags: [],
       subCategories: [],
       userFilters: {
       },
-      tags: availableChoices.tags
     }
   }
   componentDidUpdate() {
-    preparyQuery(this.state.userFilters);
-
+    // this.preparyQuery(this.state.userFilters);
+    this.handleUpdateResultItems();
+    console.log("update")
 
   }
 
@@ -90,6 +85,25 @@ class Sorting extends Component {
       this.setState({ userFilters: userfilters });
       // console.log(this.state.userFilters)
 
+    });
+  }
+  preparyQuery = (userFilters) => {
+    return `&q=&rows=10&start=
+    1`;
+    // console.log(Object.values(options))
+    // Object.values(options).forEach((option) => {
+    //   console.log(option)
+    //   console.log(`refine.category=${option.category}+-%3E${option.name}`)
+    // });
+  }
+
+  handleUpdateResultItems = async () => {
+    const query = this.preparyQuery(this.state.userFilters);
+    await axios.get(`https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-${query}`).then((response) => {
+      this.props.updateResultItems(response.data.records);
+      console.log(response.data.nhits)
+      this.props.updateNHits(response.data.nhits);
+      console.log(response);
     });
   }
 
@@ -309,7 +323,11 @@ class Sorting extends Component {
           <FormControl component="fieldset">
             <FormGroup>
               <FormControlLabel
-                control={<Switch checked={this.state.blind} onChange={() => this.setState({ ...this.state, blind: this.state.blind === 0 ? 1 : 0 })} name="blind" />}
+                control={<Switch checked={this.state.blind}
+                  onChange={() => {
+                    this.setState({ ...this.state, blind: this.state.blind === 0 ? 1 : 0 });
+                  }
+                  } name="blind" />}
                 label="Accès mal voyant"
               />
             </FormGroup>
@@ -360,115 +378,4 @@ class Sorting extends Component {
 
 }
 
-const availableChoices = {
-  categories: [
-    {
-      label: 'Animations',
-      subCategories: [
-        {
-          label: 'Atelier / Cours',
-        }
-      ]
-    },
-    {
-      label: 'Concerts',
-      subCategories: [
-        {
-          label: 'Chanson française',
-
-        }
-      ]
-    },
-    {
-      label: 'Évènements',
-      subCategories: [
-        {
-          label: 'Chanson française',
-
-        }
-      ]
-    },
-    {
-      label: 'Expositions',
-      subCategories: [
-        {
-          label: 'Chanson française',
-
-        }
-      ]
-    },
-    {
-      label: 'Spectacles',
-      subCategories: [
-        {
-          label: 'Chanson française',
-        }
-      ]
-    },
-  ],
-  tags: [
-    'Ados',
-    'Bibliothèques',
-    'Cinéma',
-    'En Famille',
-    'Enfants',
-    'English',
-    'Étudiants',
-    'Expos',
-    'Geek',
-    'Gourmand',
-    'Insolite',
-    'Les Nuits',
-    'Musique',
-    'Noël',
-    'Plein air',
-    'Queer Lgbt',
-    'Solidaire',
-    'Sport',
-    'Urbain',
-    'Végétalisons Paris',
-  ],
-  accessibility: [
-    {
-      label: 'Accès PMR',
-      queryValue: 'pmr',
-      value: false,
-    },
-    {
-      label: 'Accès mal voyant',
-      queryValue: 'blind',
-      value: false,
-    },
-    {
-      label: 'Accès mal entendant',
-      queryValue: 'deaf',
-      value: false,
-    }
-  ],
-  types: [
-    {
-      label: 'Type d\'acc\u00E8s',
-      queryValue: 'access_type',
-      availableValues: [
-        'conseillé',
-        'libre',
-        'réservation'
-      ],
-      selectedValues: []
-    },
-    {
-      label: 'Type de prix',
-      queryValue: 'price_type',
-      availableValues: [
-        'gratuit',
-        'payant',
-      ],
-      selectedValues: []
-    },
-
-  ]
-
-}
-
-
-export default withStyles(useStyles)(Sorting);
+export default connect(null, { updateResultItems, updateNHits })(withStyles(useStyles)(Sorting));

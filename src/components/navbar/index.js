@@ -11,14 +11,14 @@ const useStyle = theme => ({
         flexGrow: 1,
     },
     title: {
-        flexGrow:1,
+        flexGrow: 1,
         display: 'none',
         [theme.breakpoints.up('sm')]: {
             display: 'block',
         },
     },
     search: {
-        flexGrow:2,
+        flexGrow: 2,
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -59,9 +59,6 @@ const useStyle = theme => ({
 });
 
 class SearchAppBar extends Component {
-    constructor(props){
-        super(props);
-    }
 
     inputHandler = (event) => {
         this.props.updateSearchTerm(event.target.value);
@@ -70,7 +67,7 @@ class SearchAppBar extends Component {
     render() {
 
         const { classes } = this.props;
-        
+
         return (
             <div className={classes.root} >
                 <AppBar position="fixed">
