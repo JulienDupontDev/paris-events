@@ -17,14 +17,7 @@ const useStyles = (theme) => ({
     padding: "40px",
     display: "flex",
     justifyContent: "center"
-  },
-  // formControl: {
-  //   margin: theme.spacing(1),
-  //   minWidth: 120,
-  // },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+  }
 });
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -126,7 +119,7 @@ class Sorting extends Component {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={2} className={classes.root}>
+      <Grid container item spacing={2} className={classes.root}>
         <Grid item xs={6} sm={4} >
           <Autocomplete
             multiple
@@ -234,7 +227,6 @@ class Sorting extends Component {
               }
               this.setState({
                 userFilters: {
-
                   ...this.state.userFilters, tags: {
                     filters: [...values], facet: "tags"
                   }

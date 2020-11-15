@@ -1,43 +1,82 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import { fade, withStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
+import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Fab from '@material-ui/core/Fab';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Zoom from '@material-ui/core/Zoom';
+import { Link } from '@material-ui/core';
 
-const useStyle = theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        position: 'fixed',
+        display: "flex",
+        justifyContent: 'center',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
     },
-    title: {
-        flexGrow: 1,
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block',
-        },
-    },
-});
+    title: {},
+}));
 
-class SearchAppBar extends Component {
+function ScrollTop(props) {
+    const { children, window } = props;
+    const classes = useStyles();
+    // Note that you normally won't need to set the window ref as useScrollTrigger
+    // will default to window.
+    // This is only being set here because the demo is in an iframe.
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 100,
+    });
 
-    render() {
+    const handleClick = (event) => {
+        const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');
 
-        const { classes } = this.props;
+        if (anchor) {
+            anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
 
-        return (
-            <div className={classes.root} >
-                <AppBar position="fixed">
-                    <Toolbar>
-                        <Typography className={classes.title} variant="h6" noWrap>
-                            Paris évènements
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
+    return (
+        <Zoom in={trigger}>
+            <div onClick={handleClick} role="presentation" className={classes.root}>
+                {children}
             </div>
-        )
-    }
-
+        </Zoom>
+    );
 }
 
-export default withStyles(useStyle)(SearchAppBar);
+ScrollTop.propTypes = {
+    children: PropTypes.element.isRequired,
+    /**
+     * Injected by the documentation to work in an iframe.
+     * You won't need it on your project.
+     */
+    window: PropTypes.func,
+};
+
+export default function BackToTop(props) {
+    return (
+        <React.Fragment>
+            <CssBaseline />
+            <AppBar>
+                <Toolbar>
+                    <Link underline="none" href="/" style={{ color: "white" }}>Paris évènements</Link>
+                </Toolbar>
+            </AppBar>
+            <Toolbar id="back-to-top-anchor" />
+            <ScrollTop {...props}>
+                <Fab color="primary" size="small" aria-label="scroll back to top">
+                    <KeyboardArrowUpIcon />
+                </Fab>
+            </ScrollTop>
+        </React.Fragment >
+    );
+}
