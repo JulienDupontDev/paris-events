@@ -41,9 +41,6 @@ class Sorting extends Component {
     super(props);
     this.baseUrl = "https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/api";
     this.state = {
-      pmr: 0,
-      blind: 0,
-      deaf: 0,
       postCodes: [],
       cities: [],
       places: [],
@@ -51,13 +48,20 @@ class Sorting extends Component {
       tags: [],
       subCategories: [],
       userFilters: {
-      },
+        pmr: { value: 0 },
+        blind: { value: 0 },
+        deaf: { value: 0 },
+        categories: [],
+        addresses_zipcodes: [],
+        addresses_names: [],
+        addresses_cities: [],
+        subCategories: []
+      }
     }
   }
   componentDidUpdate() {
-    // this.preparyQuery(this.state.userFilters);
     this.handleUpdateResultItems();
-    console.log("update")
+    // console.log(this.state.userFilters)
 
   }
 
@@ -79,17 +83,27 @@ class Sorting extends Component {
         }
       )
 
-      // console.log(Object.values(this.state.userFilters).length)
-      let userfilters = { ...this.state.userFilters }
-
-      this.setState({ userFilters: userfilters });
-      // console.log(this.state.userFilters)
-
     });
   }
-  preparyQuery = (userFilters) => {
-    return `&q=&rows=10&start=
-    1`;
+  preparyQuery = () => {
+    let query = '';
+    Object.values(this.state.userFilters).map((value) => {
+
+      if (value.filters && value.filters.length !== 0) {
+        query += `&facet=${value.facet}`;
+        console.log('lalala')
+
+        value.filters.map((filter) => query += `&refine.${value.facet}=${encodeURIComponent(filter.path).replaceAll(' ', '+')}`);
+      } else {
+        console.log("valeur : ",)
+
+        query += value.facet !== undefined ? `&facet=${value.facet}&refine.${value.facet}=${value.value}` : '';
+      }
+    });
+
+    query = query !== '' ? query : '';
+    console.log("query" + query)
+    return `&q=${query}&rows=10&start=0`;
     // console.log(Object.values(options))
     // Object.values(options).forEach((option) => {
     //   console.log(option)
@@ -98,12 +112,13 @@ class Sorting extends Component {
   }
 
   handleUpdateResultItems = async () => {
-    const query = this.preparyQuery(this.state.userFilters);
+    const query = this.preparyQuery();
     await axios.get(`https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-${query}`).then((response) => {
-      this.props.updateResultItems(response.data.records);
-      console.log(response.data.nhits)
+      this.props.updateResultItems({ results: response.data.records, query: query });
+      // console.log(response.data.nhits)
       this.props.updateNHits(response.data.nhits);
-      console.log(response);
+
+      // console.log(response);
     });
   }
 
@@ -121,13 +136,16 @@ class Sorting extends Component {
             limitTags={2}
             options={this.state.categories}
             disableCloseOnSelect
+
             onChange={(event, values) => {
+              console.log(values)
               if (values.length === 0) {
-                this.setState({ ...this.state, subCategories: [] })
+                this.setState({ ...this.state, subCategories: [], userFilters: { ...this.state.userFilters, categories: [] } })
                 return;
               }
               let tempArray = [];
               values.forEach((category) => {
+
                 let subTempArray =
                   // tempArray = tempArray.concat(
                   category.facets.filter(
@@ -135,9 +153,14 @@ class Sorting extends Component {
                 subTempArray.forEach((subCategory) => subCategory.category = category.name)
                 tempArray = tempArray.concat(subTempArray)
               }
-              )
+              );
 
-              this.setState({ subCategories: tempArray });
+              console.log(values)
+
+              this.setState({
+                subCategories: tempArray,
+                userFilters: { ...this.state.userFilters, categories: { filters: [...values], facet: "category" } }
+              });
 
             }
             }
@@ -169,9 +192,13 @@ class Sorting extends Component {
             groupBy={(subCategory) => subCategory.category}
             disableCloseOnSelect
             onChange={(event, values) => {
-              const userfilters = this.state.userFilters;
-              userfilters.subCategories = values;
-              this.setState({ userFilters: userfilters })
+              if (values.length === 0) {
+                this.setState({ userFilters: { ...this.state.userFilters, categories: [] } })
+                return;
+              }
+              this.setState({
+                userFilters: { ...this.state.userFilters, categories: { filters: [...values], facet: "category" } }
+              });
             }}
             getOptionLabel={(subCategory) => subCategory.name}
             renderOption={(option, { selected }) => {
@@ -201,10 +228,18 @@ class Sorting extends Component {
             limitTags={2}
             options={this.state.tags}
             onChange={(event, values) => {
-              const userFilters = this.state.userFilters;
-              userFilters.tags = values;
-              // console.log(userFilters)
-              this.setState({ userFilters: userFilters })
+              if (values.length === 0) {
+                this.setState({ userFilters: { ...this.state.userFilters, tags: [] } })
+                return;
+              }
+              this.setState({
+                userFilters: {
+
+                  ...this.state.userFilters, tags: {
+                    filters: [...values], facet: "tags"
+                  }
+                }
+              });
             }}
             disableCloseOnSelect
             getOptionLabel={(tag) => tag.name}
@@ -233,6 +268,20 @@ class Sorting extends Component {
             limitTags={2}
             options={this.state.places}
             disableCloseOnSelect
+            onChange={(event, values) => {
+
+              if (values.length === 0) {
+                this.setState({ userFilters: { ...this.state.userFilters, addresses_names: [] } })
+                return;
+              }
+              this.setState({
+                userFilters: {
+                  ...this.state.userFilters, addresses_names: {
+                    filters: [...values], facet: "address_name"
+                  }
+                }
+              });
+            }}
             getOptionLabel={(place) => place.name}
             renderOption={(option, { selected }) => (
               <React.Fragment>
@@ -260,9 +309,18 @@ class Sorting extends Component {
             options={this.state.postCodes}
             disableCloseOnSelect
             onChange={(event, values) => {
-              // this.setState({ ...this.state, subCategories: tempArray })
-            }
-            }
+              if (values.length === 0) {
+                this.setState({ userFilters: { ...this.state.userFilters, addresses_zipcodes: [] } })
+                return;
+              }
+              this.setState({
+                userFilters: {
+                  ...this.state.userFilters, addresses_zipcodes: {
+                    filters: [...values], facet: "address_zipcode"
+                  }
+                }
+              });
+            }}
             getOptionLabel={(option) => option.name}
             renderOption={(option, { selected }) => (
               <React.Fragment>
@@ -288,7 +346,19 @@ class Sorting extends Component {
             limitTags={2}
             options={this.state.cities}
             disableCloseOnSelect
-            onChange={(event, values) => null}
+            onChange={(event, values) => {
+              if (values.length === 0) {
+                this.setState({ userFilters: { ...this.state.userFilters, addresses_cities: [] } })
+                return;
+              }
+              this.setState({
+                userFilters: {
+                  ...this.state.userFilters, addresses_cities: {
+                    filters: [...values], facet: 'address_city'
+                  }
+                }
+              });
+            }}
             getOptionLabel={(city) => city.name}
             renderOption={(option, { selected }) => {
               return (
@@ -313,7 +383,13 @@ class Sorting extends Component {
           <FormControl component="fieldset">
             <FormGroup>
               <FormControlLabel
-                control={<Switch checked={this.state.pmr} onChange={() => this.setState({ ...this.state, pmr: this.state.pmr === 0 ? 1 : 0 })} name="pmr" />}
+                control={<Switch checked={this.state.userFilters.pmr.value === 1} onChange={() => {
+                  this.setState({
+                    ...this.state,
+                    userFilters: { ...this.state.userFilters, pmr: { value: this.state.userFilters.pmr.value === 0 ? 1 : 0, facet: 'pmr' } }
+                  });
+
+                }} name="pmr" />}
                 label="Mobilité réduite"
               />
             </FormGroup>
@@ -323,11 +399,14 @@ class Sorting extends Component {
           <FormControl component="fieldset">
             <FormGroup>
               <FormControlLabel
-                control={<Switch checked={this.state.blind}
+                control={<Switch checked={this.state.userFilters.blind.value === 1}
                   onChange={() => {
-                    this.setState({ ...this.state, blind: this.state.blind === 0 ? 1 : 0 });
-                  }
-                  } name="blind" />}
+                    this.setState({
+                      ...this.state,
+                      userFilters: { ...this.state.userFilters, blind: { value: this.state.userFilters.blind.value === 0 ? 1 : 0, facet: 'blind' } }
+                    });
+
+                  }} name="blind" />}
                 label="Accès mal voyant"
               />
             </FormGroup>
@@ -337,18 +416,25 @@ class Sorting extends Component {
           <FormControl component="fieldset">
             <FormGroup>
               <FormControlLabel
-                control={<Switch checked={this.state.deaf} onChange={() => this.setState({ ...this.state, deaf: this.state.deaf === 0 ? 1 : 0 })} name="deaf" />}
+                control={<Switch checked={this.state.userFilters.deaf.value === 1} onChange={() => {
+                  this.setState({
+                    ...this.state,
+                    userFilters: { ...this.state.userFilters, deaf: { value: this.state.userFilters.deaf.value === 0 ? 1 : 0, facet: 'deaf' } }
+                  });
+
+                }}
+                  name="deaf" />}
                 label="Accès mal entendant"
               />
             </FormGroup>
           </FormControl>
         </Grid>
 
-        {this.state.types ? this.state.types.forEach((type) => (
+        {/* {this.state.types ? this.state.types.forEach((type) => (
           <Grid item sm={2}>
             <Autocomplete
               multiple
-              noOptionsText="Pas d'options"
+              noOptionsText="Pas d'options" 
               id={type.name}
               limitTags={2}
               options={this.state.types}
@@ -371,7 +457,7 @@ class Sorting extends Component {
               )}
             />
           </Grid>
-        )) : null}
+        )) : null} */}
       </Grid>
     );
   }

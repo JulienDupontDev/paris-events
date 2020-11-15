@@ -1,17 +1,18 @@
 import { UPDATE_RESULT_ITEMS } from '../actionTypes';
 
 const initialState = {
-  resultItems: []
+  resultItems: [],
+  query: ''
 }
 
 const resultItemsReducers = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_RESULT_ITEMS:
-      const { resultItems } = action.payload;
+      const { query, results } = action.payload.resultItems;
       return {
-        // ...state,
+        query: query,
         resultItems: [
-          ...resultItems
+          ...results
         ]
       }
     default:

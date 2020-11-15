@@ -25,7 +25,7 @@ class Home extends Component {
 
 
   render() {
-    const { classes, searchTerm } = this.props;
+    const { classes } = this.props;
 
     return (
       <Grid className={classes.root}>
@@ -41,10 +41,6 @@ class Home extends Component {
 
         <Grid item sm={12}>
           <ResultPagination test="coucou" />
-
-          {searchTerm}
-          {/* {this.state.events}
-          <EventCard /> */}
         </Grid>
       </Grid>
     );

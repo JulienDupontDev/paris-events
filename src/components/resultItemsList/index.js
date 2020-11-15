@@ -12,26 +12,23 @@ const mapStateToProps = state => {
 const useStyles = (theme) => ({
   root: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+
   },
   coverImage: {
     objectFit: 'cover',
-  },
-  // formControl: {
-  //   margin: theme.spacing(1),
-  //   minWidth: 120,
-  // },
-  pagination: {
-    display: 'flex',
-    justifyContent: 'center'
   },
   itemsContainer: {
     display: 'flex',
     justifyContent: 'center'
   },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+  itemDescription: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    webkitLineClamp: 1, /* number of lines to show */
+    webkitBoxOrient: "vertical",
+  }
 });
 
 const toHtml = (string) => {
@@ -43,15 +40,6 @@ class ResultItemsList extends Component {
 
   constructor(props) {
     super(props);
-    // this.state = props;
-    // this.state = {
-    //   ...this.state,
-    //   totalHits: 150,
-    //   items: [
-    //   ],
-    //   itemPage: 1
-    // }
-    // console.log(this.props)
   }
 
   render() {
@@ -74,16 +62,17 @@ class ResultItemsList extends Component {
                     href={item.fields.url}
                     target='_blank'
                     rel='noopener'>
-                    <CardMedia
+                    {/* <CardMedia
                       component="img"
                       alt={item.fields.cover_alt}
                       height="250"
                       image={item.fields.cover_url}
                       title="Contemplative Reptile"
-                      className={classes.coverImage}
-                    // onLoadStart={console.log(this)}
+                      classNamel
+                      ={classes.coverImage} */}
+                    {/* // onLoadStart={console.log(this)}
                     // onLoadedData={console.log('loaded')}
-                    />
+                    /> */}
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
                         {item.fields.title}
@@ -91,7 +80,9 @@ class ResultItemsList extends Component {
                       <Typography
                         variant="body2"
                         color="textSecondary"
-                        component="p">
+                        component="p"
+                        className={classes.itemDescription}
+                      >
                         {toHtml(item.fields.description)}
                       </Typography>
                       <Iframe src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
