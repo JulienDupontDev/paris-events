@@ -9,6 +9,7 @@ const resultItemsReducers = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_RESULT_ITEMS:
       const { query, results } = action.payload.resultItems;
+
       return {
         query: query,
         resultItems: [

@@ -16,7 +16,7 @@ const useStyles = (theme) => ({
   root: {
     padding: "40px",
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   }
 });
 
@@ -80,7 +80,7 @@ class Sorting extends Component {
   }
   preparyQuery = () => {
     let query = '';
-    Object.values(this.state.userFilters).map((value) => {
+    let test = Object.values(this.state.userFilters).forEach((value) => {
 
       if (value.filters && value.filters.length !== 0) {
         query += `&facet=${value.facet}`;
@@ -93,15 +93,12 @@ class Sorting extends Component {
         query += value.facet !== undefined ? `&facet=${value.facet}&refine.${value.facet}=${value.value}` : '';
       }
     });
+    console.log(test)
 
     query = query !== '' ? query : '';
     console.log("query" + query)
     return `&q=${query}&rows=10&start=0`;
-    // console.log(Object.values(options))
-    // Object.values(options).forEach((option) => {
-    //   console.log(option)
-    //   console.log(`refine.category=${option.category}+-%3E${option.name}`)
-    // });
+
   }
 
   handleUpdateResultItems = async () => {
@@ -119,7 +116,7 @@ class Sorting extends Component {
     const { classes } = this.props;
 
     return (
-      <Grid container item spacing={2} className={classes.root}>
+      <Grid container spacing={2} className={classes.root}>
         <Grid item xs={6} sm={4} >
           <Autocomplete
             multiple

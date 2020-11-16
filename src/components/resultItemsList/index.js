@@ -1,10 +1,13 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, IconButton, Link, Typography, withStyles } from '@material-ui/core';
-import { Facebook } from '@material-ui/icons';
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Link, Typography, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 import Iframe from 'react-iframe';
 import { connect } from 'react-redux'
 import { getResultItemsList } from '../../redux/selectors';
 
+/**
+ * Recupères les résultats dans le store redux
+ * @param {*} state 
+ */
 const mapStateToProps = state => {
   const resultItems = getResultItemsList(state);
   return resultItems;
@@ -20,36 +23,40 @@ const useStyles = (theme) => ({
   },
   itemsContainer: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: "1em",
+    marginBottom: "1em"
   },
   itemDescription: {
     overflow: "hidden",
-    textOverflow: "ellipsis",
-    display: "-webkit-box",
-    webkitLineClamp: 1, /* number of lines to show */
-    webkitBoxOrient: "vertical",
   }
 });
 
+/**
+ * Permet de reformatter la description car les données ne se tranforment pas directement en HTML toutes seules
+ * On limite aussi le nombre de caractères affichés pour uniformiser l'affichage des cartes
+ * @param {*} string 
+ */
 const toHtml = (string) => {
   let parser = new DOMParser();
   let doc = parser.parseFromString(string, 'text/html');
-  return (doc.body.innerText);
-}
-class ResultItemsList extends Component {
+  let content = doc.body.innerText;
 
-  constructor(props) {
-    super(props);
-  }
+  return (content.length < 300 ? content : content.substring(0, 300).concat('.....'));
+}
+
+/**
+ * Composant qui affiche les résultats de recherche sous forme de carte
+ */
+class ResultItemsList extends Component {
 
   render() {
     const { classes } = this.props
 
     return (
       <Grid
-        container
+        container item
         spacing={2}
-        style={{ marginTop: "1em" }}
         className={classes.itemsContainer}>
 
         {this.props.resultItems.length === 0 ? "Pas de résultats" :
@@ -62,20 +69,18 @@ class ResultItemsList extends Component {
                     href={item.fields.url}
                     target='_blank'
                     rel='noopener'>
-                    {/* <CardMedia
+                    <CardMedia
                       component="img"
                       alt={item.fields.cover_alt}
                       height="250"
                       image={item.fields.cover_url}
                       title="Contemplative Reptile"
-                      classNamel
-                      ={classes.coverImage} */}
-                    {/* // onLoadStart={console.log(this)}
-                    // onLoadedData={console.log('loaded')}
-                    /> */}
+                      className
+                      ={classes.coverImage} />
+
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {item.fields.title}
+                        {item.fields.title.toUpperCase()}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -92,16 +97,17 @@ class ResultItemsList extends Component {
                         ariaHidden={false}
                         allowFullScreen=""
                       />
+                      <Typography>
+                        {item.fields.price_type}
+                        {item.fields.price_detail ? ' - ' + item.fields.price_detail : ''}
+                      </Typography>
                     </CardContent>
+                    <CardActions>
+                      <Button size="small" color="primary" >
+                        <Link underline='none' href={item.fields.url} target='_blank' rel='noopener'>En savoir plus</Link>
+                      </Button>
+                    </CardActions>
                   </CardActionArea>
-                  <CardActions>
-                    <Button size="small" color="primary" >
-                      <Link underline='none' href={item.fields.url} target='_blank' rel='noopener'>En savoir plus</Link>
-                    </Button>
-                    <IconButton>
-                      <Facebook />
-                    </IconButton>
-                  </CardActions>
                 </Card>
               </Grid>
 

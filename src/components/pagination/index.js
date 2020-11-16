@@ -1,4 +1,4 @@
-import { Button, Grid, withStyles } from '@material-ui/core';
+import { Grid, withStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import React, { Component } from 'react';
 import axios from 'axios';
@@ -7,6 +7,10 @@ import { updateResultItems } from '../../redux/actions';
 import ResultItemsList from '../resultItemsList'
 import { getResultItemsList, getNhits } from '../../redux/selectors';
 
+/**
+ * Récupères les résultats de recherche ainsi que le nombre total de 
+ * @param {*} state 
+ */
 const mapStateToProps = state => {
   const resultItems = getResultItemsList(state);
   const nHits = getNhits(state);
@@ -29,21 +33,25 @@ class ResultPagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalHits: this.props.nHits['nHits'],
+      totalHits: this.props.nHits.nHits,
       itemPage: 1
     }
   }
 
+  /**
+   * Permet de remettre la page par défaut à 1 si le nombre de résultats a changé
+   */
   componentDidUpdate = () => {
-    if (this.state.totalHits !== Math.floor(this.props.nHits.nHits / 10)) {
-      this.setState({ ...this.state, totalHits: Math.floor(this.props.nHits.nHits / 10), itemPage: 1 });
+    if (this.state.totalHits !== Math.floor(this.props.nHits.nHits / 10) + 1) {
+      this.setState({ ...this.state, totalHits: Math.floor(this.props.nHits.nHits / 10) + 1, itemPage: 1 });
     }
-
-    console.log(this.props)
-
-
   }
 
+  /**
+   * Va récupérer les résultats en fonction de la page demandée en reprennant la requête existante
+   * @param {*} event 
+   * @param {int} page 
+   */
   handleUpdateResultItems = async (event, page) => {
     await axios.get('https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-' + this.props.resultItems.query.replace(/start=(\d*)/, `start=${(page - 1) * 10}`)).then((response) => {
       // console.log(response)
@@ -63,7 +71,9 @@ class ResultPagination extends Component {
         <Grid item xs={12} className={classes.pagination}>
           <Pagination showFirstButton showLastButton count={this.state.totalHits} defaultPage={1} page={this.state.itemPage} boundaryCount={2} onChange={this.handleUpdateResultItems} />
         </Grid>
-        <ResultItemsList />
+        <Grid item>
+          <ResultItemsList />
+        </Grid>
         <Grid item xs={12} className={classes.pagination}>
           <Pagination showFirstButton showLastButton count={this.state.totalHits} defaultPage={1} page={this.state.itemPage} boundaryCount={2} onChange={this.handleUpdateResultItems} />
         </Grid>
