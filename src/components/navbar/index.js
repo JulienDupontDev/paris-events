@@ -65,7 +65,7 @@ export default function BackToTop(props) {
             <CssBaseline />
             <AppBar>
                 <Toolbar>
-                    <Link underline="none" href="/" style={{ color: "white" }} rel="noreferrer" variant="h1">Paris évènements</Link>
+                    <Link underline="none" href="/" style={{ color: "white", fontSize: "15pt" }} rel="noreferrer" variant="h1">Paris évènements</Link>
                 </Toolbar>
             </AppBar>
             <Toolbar id="back-to-top-anchor" />

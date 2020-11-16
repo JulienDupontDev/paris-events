@@ -91,7 +91,7 @@ class ResultItemsList extends Component {
                         {toHtml(item.fields.description)}
                       </Typography>
                       <Iframe src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
-    &q=${item.fields.address_name}&zoom=18`}
+    &q=${item.fields.address_street} ${item.fields.address_city}&zoom=18`}
                         frameBorder={0}
                         style={{ border: 0, minWidth: "100%", height: "100px" }}
                         ariaHidden={false}
@@ -102,12 +102,12 @@ class ResultItemsList extends Component {
                         {item.fields.price_detail ? ' - ' + item.fields.price_detail : ''}
                       </Typography>
                     </CardContent>
-                    <CardActions>
-                      <Button size="small" color="primary" >
-                        <Link underline='none' href={item.fields.url} target='_blank' rel='noopener'>En savoir plus</Link>
-                      </Button>
-                    </CardActions>
                   </CardActionArea>
+                  <CardActions>
+                    <Button size="small" color="primary" >
+                      <Link underline='none' href={item.fields.url} target='_blank' rel='noopener'>En savoir plus</Link>
+                    </Button>
+                  </CardActions>
                 </Card>
               </Grid>
 

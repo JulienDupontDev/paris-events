@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { fade, withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Grid from '@material-ui/core/Grid';
-import { FormControl, FormControlLabel, FormGroup, Switch } from '@material-ui/core';
+import { FormControl, FormControlLabel, FormGroup, InputBase, Switch } from '@material-ui/core';
 import { connect } from 'react-redux'
 import { updateResultItems, updateNHits } from '../../redux/actions';
 import axios from 'axios';
+import SearchIcon from '@material-ui/icons/Search';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 
 const useStyles = (theme) => ({
@@ -17,17 +20,47 @@ const useStyles = (theme) => ({
     padding: "40px",
     display: "flex",
     justifyContent: "center",
-  }
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
 });
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-
-
-// const executeQuery = (query) => {
-
-// }
 
 class Sorting extends Component {
   constructor(props) {
@@ -48,17 +81,16 @@ class Sorting extends Component {
         addresses_zipcodes: [],
         addresses_names: [],
         addresses_cities: [],
-        subCategories: []
+        subCategories: [],
+        selectedDate: { value: (new Date()).toISOString() }
       }
     }
   }
+
   componentDidUpdate() {
     this.handleUpdateResultItems();
-    // console.log(this.state.userFilters)
-
+    console.log(this.state.userFilters.selectedDate)
   }
-
-
 
   componentDidMount() {
 
@@ -78,9 +110,10 @@ class Sorting extends Component {
 
     });
   }
+
   preparyQuery = () => {
     let query = '';
-    let test = Object.values(this.state.userFilters).forEach((value) => {
+    Object.values(this.state.userFilters).forEach((value) => {
 
       if (value.filters && value.filters.length !== 0) {
         query += `&facet=${value.facet}`;
@@ -88,16 +121,13 @@ class Sorting extends Component {
 
         value.filters.map((filter) => query += `&refine.${value.facet}=${encodeURIComponent(filter.path).replaceAll(' ', '+')}`);
       } else {
-        console.log("valeur : ",)
-
-        query += value.facet !== undefined ? `&facet=${value.facet}&refine.${value.facet}=${value.value}` : '';
+        value.facet !== "q" ?
+          query += value.facet !== undefined ? `&facet=${value.facet}&refine.${value.facet}=${value.value}` : ''
+          : query += `&q=${value.value}`
       }
     });
-    console.log(test)
-
     query = query !== '' ? query : '';
-    console.log("query" + query)
-    return `&q=${query}&rows=10&start=0`;
+    return `${query}&rows=10&start=0`;
 
   }
 
@@ -117,6 +147,22 @@ class Sorting extends Component {
 
     return (
       <Grid container spacing={2} className={classes.root}>
+        <Grid item xs={12}>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Recherche"
+              // className={{
+              //   root: classes.inputRoot,
+              //   input: classes.inputInput,
+              // }}
+              onChange={(event) => this.setState({ userFilters: { ...this.state.userFilters, userQuery: { value: event.target.value, facet: 'q' } } })}
+              inputProps={{ 'aria-label': 'Rechercher' }}
+            />
+          </div>
+        </Grid>
         <Grid item xs={6} sm={4} >
           <Autocomplete
             multiple
@@ -418,12 +464,25 @@ class Sorting extends Component {
             </FormGroup>
           </FormControl>
         </Grid>
-
-        {/* {this.state.types ? this.state.types.forEach((type) => (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            margin="normal"
+            id="date-picker-dialog"
+            label="Date de l'évènement"
+            format="dd/MM/yyyy"
+            lang="fr"
+            value={new Date(this.state.userFilters.selectedDate.value)}
+            onChange={(time) => this.setState({ userFilters: { ...this.state.userFilters, selectedDate: { value: time.toISOString() }, facet: 'date_start' } })}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </MuiPickersUtilsProvider>
+        {this.state.types ? this.state.types.forEach((type) => (
           <Grid item sm={2}>
             <Autocomplete
               multiple
-              noOptionsText="Pas d'options" 
+              noOptionsText="Pas d'options"
               id={type.name}
               limitTags={2}
               options={this.state.types}
@@ -446,7 +505,7 @@ class Sorting extends Component {
               )}
             />
           </Grid>
-        )) : null} */}
+        )) : null}
       </Grid>
     );
   }
