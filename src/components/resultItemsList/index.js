@@ -1,122 +1,128 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Link, Typography, withStyles } from '@material-ui/core';
-import React, { Component } from 'react';
-import Iframe from 'react-iframe';
+import {
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+  withStyles
+} from '@material-ui/core'
+import React, { Component } from 'react'
+import Iframe from 'react-iframe'
 import { connect } from 'react-redux'
-import { getResultItemsList } from '../../redux/selectors';
-
+import { getResultItemsList } from '../../redux/selectors'
+import EventDetails from '../eventDetails'
 /**
  * Recupères les résultats dans le store redux
- * @param {*} state 
+ * @param {*} state
  */
 const mapStateToProps = state => {
-  const resultItems = getResultItemsList(state);
-  return resultItems;
+  const resultItems = getResultItemsList(state)
+  return resultItems
 }
-const useStyles = (theme) => ({
+const useStyles = theme => ({
   root: {
-    display: "flex",
-    justifyContent: "center",
-
+    display: 'flex',
+    justifyContent: 'center'
   },
   coverImage: {
     objectFit: 'cover',
+    width: '100%'
   },
   itemsContainer: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: "1em",
-    marginBottom: "1em"
+    marginTop: '1em',
+    marginBottom: '1em'
   },
   itemDescription: {
-    overflow: "hidden",
+    overflow: 'hidden'
   }
-});
+})
 
 /**
  * Permet de reformatter la description car les données ne se tranforment pas directement en HTML toutes seules
  * On limite aussi le nombre de caractères affichés pour uniformiser l'affichage des cartes
- * @param {*} string 
+ * @param {*} string
  */
-const toHtml = (string) => {
-  let parser = new DOMParser();
-  let doc = parser.parseFromString(string, 'text/html');
-  let content = doc.body.innerText;
+const toHtml = string => {
+  let parser = new DOMParser()
+  let doc = parser.parseFromString(string, 'text/html')
+  let content = doc.body.innerText
 
-  return (content.length < 300 ? content : content.substring(0, 300).concat('.....'));
+  return content.length < 300
+    ? content
+    : content.substring(0, 300).concat('.....')
 }
 
 /**
  * Composant qui affiche les résultats de recherche sous forme de carte
  */
 class ResultItemsList extends Component {
-
-  render() {
-    const { classes } = this.props
+  render () {
+    const { classes, resultItems } = this.props
 
     return (
-      <Grid
-        container item
-        spacing={2}
-        className={classes.itemsContainer}>
-
-        {this.props.resultItems.length === 0 ? "Pas de résultats" :
-
-          this.props.resultItems.map((item) => {
-            return (
-              <Grid item xs={10} sm={5} key={item.fields.id}>
-                <Card>
-                  <CardActionArea
-                    href={item.fields.url}
-                    target='_blank'
-                    rel='noopener'>
-                    <CardMedia
-                      component="img"
-                      alt={item.fields.cover_alt}
-                      height="250"
-                      image={item.fields.cover_url}
-                      title="Contemplative Reptile"
-                      className
-                      ={classes.coverImage} />
-
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {item.fields.title.toUpperCase()}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                        className={classes.itemDescription}
-                      >
-                        {toHtml(item.fields.description)}
-                      </Typography>
-                      <Iframe src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
-    &q=${item.fields.address_street} ${item.fields.address_city}&zoom=18`}
-                        frameBorder={0}
-                        style={{ border: 0, minWidth: "100%", height: "100px" }}
-                        ariaHidden={false}
-                        allowFullScreen=""
+      <Grid container item spacing={2} className={classes.itemsContainer}>
+        {resultItems.length === 0
+          ? 'Pas de résultats'
+          : resultItems.map(item => {
+              return (
+                <Grid item xs={10} sm={5} key={item.fields.id}>
+                  <Card>
+                    <CardActionArea>
+                      <CardMedia
+                        component='img'
+                        alt={item.fields.cover_alt}
+                        height='250'
+                        image={item.fields.cover_url}
+                        title='Contemplative Reptile'
+                        className={classes.coverImage}
                       />
-                      <Typography>
-                        {item.fields.price_type}
-                        {item.fields.price_detail ? ' - ' + item.fields.price_detail : ''}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions>
-                    <Button size="small" color="primary" >
-                      <Link underline='none' href={item.fields.url} target='_blank' rel='noopener'>En savoir plus</Link>
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
 
-            );
-          })
-        }
+                      <CardContent>
+                        <EventDetails item={item} />
+
+                        <Typography gutterBottom variant='h5' component='h2'>
+                          {item.fields.title.toUpperCase()}
+                        </Typography>
+                        <Typography
+                          variant='body2'
+                          color='textSecondary'
+                          component='p'
+                          className={classes.itemDescription}
+                        >
+                          {toHtml(item.fields.description)}
+                        </Typography>
+                        <Iframe
+                          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
+    &q=${item.fields.address_street} ${item.fields.address_city}&zoom=18`}
+                          frameBorder={0}
+                          style={{
+                            border: 0,
+                            minWidth: '100%',
+                            height: '100px'
+                          }}
+                          ariaHidden={false}
+                          allowFullScreen=''
+                        />
+                        <Typography>
+                          {item.fields.price_type}
+                          {item.fields.price_detail
+                            ? ' - ' + item.fields.price_detail
+                            : ''}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions></CardActions>
+                  </Card>
+                </Grid>
+              )
+            })}
       </Grid>
-    );
+    )
   }
 }
 
-export default connect(mapStateToProps)(withStyles(useStyles)(ResultItemsList));
+export default connect(mapStateToProps)(withStyles(useStyles)(ResultItemsList))
