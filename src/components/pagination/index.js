@@ -36,7 +36,6 @@ class ResultPagination extends Component {
       itemPage: 1
     }
   }
-
   /**
    * Permet de remettre la page par défaut à 1 si le nombre de résultats a changé
    */
@@ -49,7 +48,6 @@ class ResultPagination extends Component {
       })
     }
   }
-
   /**
    * Va récupérer les résultats en fonction de la page demandée en reprennant la requête existante
    * @param {*} event

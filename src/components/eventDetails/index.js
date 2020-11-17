@@ -77,7 +77,6 @@ class EventDetails extends Component {
       open: false,
       imageLoading: true
     }
-    console.log(this.props)
   }
 
   handleClose = () => this.setState({ open: false })
