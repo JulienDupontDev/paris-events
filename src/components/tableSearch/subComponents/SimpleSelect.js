@@ -1,13 +1,13 @@
-import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import Grid from '@material-ui/core/Grid'
-import Checkbox from '@material-ui/core/Checkbox'
-import Autocomplete from '@material-ui/lab/Autocomplete'
-import React, { Component } from 'react'
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
-import { TextField } from '@material-ui/core'
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Grid from '@material-ui/core/Grid';
+import Checkbox from '@material-ui/core/Checkbox';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import React, { Component } from 'react';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import { TextField } from '@material-ui/core';
 
 class SimpleSelect extends Component {
-  render () {
+  render() {
     const { label, name, values } = this.props.infos
     const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
     const checkedIcon = <CheckBoxIcon fontSize='small' />
@@ -47,4 +47,4 @@ class SimpleSelect extends Component {
     )
   }
 }
-export default SimpleSelect
+export default SimpleSelect;

@@ -1,24 +1,24 @@
-import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
-import ListItem from '@material-ui/core/ListItem'
-import List from '@material-ui/core/List'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
-import Typography from '@material-ui/core/Typography'
-import CloseIcon from '@material-ui/icons/Close'
-import Slide from '@material-ui/core/Slide'
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
 import { CardMedia, Grid, Link } from '@material-ui/core'
-import { Facebook, Mail, Phone } from '@material-ui/icons'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
-import Leaflet from 'leaflet'
+import { Facebook, Mail, Phone } from '@material-ui/icons';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import Leaflet from 'leaflet';
 
-Leaflet.Icon.Default.imagePath = '../node_modules/leaflet'
+Leaflet.Icon.Default.imagePath = '../node_modules/leaflet';
 
-delete Leaflet.Icon.Default.prototype._getIconUrl
+delete Leaflet.Icon.Default.prototype._getIconUrl;
 
 Leaflet.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -64,26 +64,26 @@ const toHtml = string => {
   let parser = new DOMParser()
   let doc = parser.parseFromString(string, 'text/html')
 
-  return doc.body.innerText
+  return doc.body.innerText;
 }
 const Transition = React.forwardRef(function Transition (props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
-})
+});
 
 class EventDetails extends Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       open: false,
       imageLoading: true
     }
   }
 
-  handleClose = () => this.setState({ open: false })
-  handleOpen = () => this.setState({ open: true })
+  handleClose = () => this.setState({ open: false });
+  handleOpen = () => this.setState({ open: true });
 
   render () {
-    const { item, classes } = this.props
+    const { item, classes } = this.props;
 
     return (
       <div>
@@ -268,4 +268,4 @@ class EventDetails extends Component {
   }
 }
 
-export default withStyles(useStyles)(EventDetails)
+export default withStyles(useStyles)(EventDetails);

@@ -1,30 +1,25 @@
 import React, { Component } from 'react'
-import { fade, withStyles } from '@material-ui/core/styles'
-import Checkbox from '@material-ui/core/Checkbox'
-import TextField from '@material-ui/core/TextField'
-import Autocomplete from '@material-ui/lab/Autocomplete'
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
-import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import Grid from '@material-ui/core/Grid'
-import {
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  InputBase
-} from '@material-ui/core'
-import { connect } from 'react-redux'
-import { updateResultItems, updateNHits } from '../../redux/actions'
-import axios from 'axios'
-import SearchIcon from '@material-ui/icons/Search'
+import { fade, withStyles } from '@material-ui/core/styles';
+import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Grid from '@material-ui/core/Grid';
+import { connect } from 'react-redux';
+import { updateResultItems, updateNHits } from '../../redux/actions';
+import axios from 'axios';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider
-} from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
-import CustomSwitch from './subComponents/Switch'
-import SimpleSelect from './subComponents/SimpleSelect'
-
-const useStyles = theme => ({
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import CustomSwitch from './subComponents/Switch';
+import SimpleSelect from './subComponents/SimpleSelect';
+import SearchInput from './subComponents/search';
+import facetsQuery from './facets.json';
+import EventDatePicker from './datePicker';
+const useStyles = (theme) => ({
   root: {
     padding: '40px',
     display: 'flex',
@@ -72,7 +67,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
 const checkedIcon = <CheckBoxIcon fontSize='small' />
 
 class Sorting extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.baseUrl =
       'https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/api'
@@ -95,18 +90,19 @@ class Sorting extends Component {
         selectedDate: { value: new Date().toISOString() }
       }
     }
-    this.updateSwitchValue = this.updateSwitchValue.bind(this)
-    this.updateSelectValue = this.updateSelectValue.bind(this)
+    this.updateSwitchValue = this.updateSwitchValue.bind(this);
+    this.updateSelectValue = this.updateSelectValue.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
-  componentDidUpdate () {
-    this.handleUpdateResultItems()
+  componentDidUpdate() {
+    this.handleUpdateResultItems();
   }
 
-  componentDidMount () {
+  componentDidMount() {
     axios
       .get(
-        'https://opendata.paris.fr/api/records/1.0/search/?disjunctive.category=true&disjunctive.tags=true&disjunctive.address_zipcode=true&disjunctive.address_city=true&disjunctive.access_type=true&disjunctive.price_type=true&disjunctive.address_name=true&refine.category=Animations+&refine.category=Concerts+&refine.category=%C3%89v%C3%A9nements+&refine.category=Expositions+&refine.category=Spectacles+&rows=0&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&facetsort.category=alphanum&facetsort.tags=alphanum&facetsort.address_name=alphanum&facetsort.address_zipcode=alphanum&facetsort.address_city=alphanum&facetsort.access_type=alphanum&facetsort.price_type=alphanum&dataset=que-faire-a-paris-&timezone=Europe%2FBerlin&lang=fr'
+        facetsQuery.query
       )
       .then(response => {
         const facets = response.data.facet_groups
@@ -125,35 +121,13 @@ class Sorting extends Component {
       })
   }
 
-  render () {
+  render() {
     const { classes } = this.props
     const { userFilters } = this.state
 
     return (
       <Grid container spacing={2} className={classes.root}>
-        <Grid item xs={12}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder='Recherche'
-              // className={{
-              //   root: classes.inputRoot,
-              //   input: classes.inputInput,
-              // }}
-              onChange={event =>
-                this.setState({
-                  userFilters: {
-                    ...this.state.userFilters,
-                    userQuery: { value: event.target.value, facet: 'q' }
-                  }
-                })
-              }
-              inputProps={{ 'aria-label': 'Rechercher' }}
-            />
-          </div>
-        </Grid>
+        <SearchInput update={this.handleSearch} />
         <Grid item xs={6} sm={4}>
           <Autocomplete
             multiple
@@ -170,21 +144,21 @@ class Sorting extends Component {
                   subCategories: [],
                   userFilters: { ...this.state.userFilters, categories: [] }
                 })
-                return
+                return;
               }
-              let tempArray = []
+              let tempArray = [];
               values.forEach(category => {
                 let subTempArray = category.facets.filter(
                   subCategory =>
                     !this.state.subCategories.includes(subCategory.name)
-                )
+                );
                 subTempArray.forEach(
                   subCategory => (subCategory.category = category.name)
-                )
+                );
                 tempArray = tempArray.concat(subTempArray)
-              })
+              });
 
-              console.log(values)
+              console.log(values);
 
               this.setState({
                 subCategories: tempArray,
@@ -192,7 +166,7 @@ class Sorting extends Component {
                   ...this.state.userFilters,
                   categories: { filters: [...values], facet: 'category' }
                 }
-              })
+              });
             }}
             getOptionLabel={option => option.name}
             renderOption={(option, { selected }) => (
@@ -315,61 +289,18 @@ class Sorting extends Component {
             value: userFilters.deaf.value
           }}
         />
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            margin='normal'
-            id='date-picker-dialog'
-            label="Date de l'évènement"
-            format='dd/MM/yyyy'
-            lang='fr'
-            value={new Date(this.state.userFilters.selectedDate.value)}
-            onChange={time =>
-              this.setState({
-                userFilters: {
-                  ...this.state.userFilters,
-                  selectedDate: { value: time.toISOString() },
-                  facet: 'date_starte'
-                }
-              })
-            }
-            KeyboardButtonProps={{
-              'aria-label': 'change date'
-            }}
-          />
-        </MuiPickersUtilsProvider>
+        <EventDatePicker update={this.handleDateUpdate} date={this.state.userFilters.selectedDate} />
         {this.state.types
           ? this.state.types.map(type => (
-              <Grid item sm={2}>
-                <Autocomplete
-                  multiple
-                  noOptionsText="Pas d'options"
-                  id={type.name}
-                  limitTags={2}
-                  options={this.state.types}
-                  disableCloseOnSelect
-                  getOptionLabel={type => type.name}
-                  renderOption={(option, { selected }) => (
-                    <React.Fragment>
-                      <Checkbox
-                        icon={icon}
-                        checkedIcon={checkedIcon}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.name}
-                    </React.Fragment>
-                  )}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      variant='outlined'
-                      label={type.name}
-                      placeholder='Mots-clés'
-                    />
-                  )}
-                />
-              </Grid>
-            ))
+            <SimpleSelect
+              infos={{
+                name: type.name,
+                label: type.name,
+                values: type.facets
+              }}
+              update={this.updateSelectValue}
+            />
+          ))
           : null}
       </Grid>
     )
@@ -380,19 +311,20 @@ class Sorting extends Component {
       this.setState({
         [objectName]: [],
         userFilters: { ...this.state.userFilters, [objectName]: [] }
-      })
+      });
 
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
+
   updateSelectValue = (object, values) => {
     if (values.length === 0) {
       this.setState({
         userFilters: { ...this.state.userFilters, [object]: [] }
       })
-      return
+      return;
     }
     this.setState({
       userFilters: {
@@ -402,7 +334,17 @@ class Sorting extends Component {
           facet: object
         }
       }
-    })
+    });
+  }
+
+  handleDateUpdate = (newDate) => {
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        selectedDate: { value: newDate.toISOString() },
+        facet: 'date_starte'
+      }
+    });
   }
 
   updateSwitchValue = (object, value) => {
@@ -411,33 +353,42 @@ class Sorting extends Component {
         ...this.state.userFilters,
         [object]: { value: value, facet: object }
       }
-    })
+    });
   }
 
   preparyQuery = () => {
     let query = ''
     Object.values(this.state.userFilters).forEach(value => {
       if (value.filters && value.filters.length !== 0) {
-        query += `&facet=${value.facet}`
-        console.log('lalala')
+        query += `&facet=${value.facet}`;
+        console.log('lalala');
 
         value.filters.map(
           filter =>
             (query += `&refine.${value.facet}=${encodeURIComponent(
               filter.path
             ).replaceAll(' ', '+')}`)
-        )
+        );
       } else {
         value.facet !== 'q'
           ? (query +=
-              value.facet !== undefined
-                ? `&facet=${value.facet}&refine.${value.facet}=${value.value}`
-                : '')
-          : (query += `&q=${value.value}`)
+            value.facet !== undefined
+              ? `&facet=${value.facet}&refine.${value.facet}=${value.value}`
+              : '')
+          : (query += `&q=${value.value}`);
       }
-    })
-    query = query !== '' ? query : ''
-    return `${query}&rows=10&start=0`
+    });
+    query = query !== '' ? query : '';
+    return `${query}&rows=10&start=0`;
+  }
+
+  handleSearch = (query) => {
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        userQuery: { value: query, facet: 'q' }
+      }
+    });
   }
 
   handleUpdateResultItems = async () => {
@@ -450,12 +401,12 @@ class Sorting extends Component {
         this.props.updateResultItems({
           results: response.data.records,
           query: query
-        })
-        this.props.updateNHits(response.data.nhits)
-      })
+        });
+        this.props.updateNHits(response.data.nhits);
+      });
   }
 }
 
 export default connect(null, { updateResultItems, updateNHits })(
   withStyles(useStyles)(Sorting)
-)
+);
