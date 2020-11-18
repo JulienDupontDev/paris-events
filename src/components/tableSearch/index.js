@@ -1,24 +1,18 @@
 import React, { Component } from 'react'
 import { fade, withStyles } from '@material-ui/core/styles';
-import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { updateResultItems, updateNHits } from '../../redux/actions';
 import axios from 'axios';
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import CustomSwitch from './subComponents/Switch';
 import SimpleSelect from './subComponents/SimpleSelect';
 import SearchInput from './subComponents/search';
 import facetsQuery from './facets.json';
 import EventDatePicker from './datePicker';
+import Categories from './subComponents/Categories';
+
 const useStyles = (theme) => ({
   root: {
     padding: '40px',
@@ -93,6 +87,8 @@ class Sorting extends Component {
     this.updateSwitchValue = this.updateSwitchValue.bind(this);
     this.updateSelectValue = this.updateSelectValue.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleUpdateCategories = this.handleUpdateCategories.bind(this);
+    this.handleUpdateSubCategories = this.handleUpdateSubCategories.bind(this);
   }
 
   componentDidUpdate() {
@@ -117,8 +113,8 @@ class Sorting extends Component {
             .facets,
           places: facets.filter(facet => facet.name === 'address_name')[0]
             .facets
-        })
-      })
+        });
+      });
   }
 
   render() {
@@ -128,120 +124,14 @@ class Sorting extends Component {
     return (
       <Grid container spacing={2} className={classes.root}>
         <SearchInput update={this.handleSearch} />
-        <Grid item xs={6} sm={4}>
-          <Autocomplete
-            multiple
-            noOptionsText="Pas d'options"
-            id='categories'
-            key='1'
-            limitTags={2}
-            options={this.state.categories}
-            disableCloseOnSelect
-            onChange={(event, values) => {
-              console.log(values)
-              if (values.length === 0) {
-                this.setState({
-                  subCategories: [],
-                  userFilters: { ...this.state.userFilters, categories: [] }
-                })
-                return;
-              }
-              let tempArray = [];
-              values.forEach(category => {
-                let subTempArray = category.facets.filter(
-                  subCategory =>
-                    !this.state.subCategories.includes(subCategory.name)
-                );
-                subTempArray.forEach(
-                  subCategory => (subCategory.category = category.name)
-                );
-                tempArray = tempArray.concat(subTempArray)
-              });
-
-              console.log(values);
-
-              this.setState({
-                subCategories: tempArray,
-                userFilters: {
-                  ...this.state.userFilters,
-                  categories: { filters: [...values], facet: 'category' }
-                }
-              });
-            }}
-            getOptionLabel={option => option.name}
-            renderOption={(option, { selected }) => (
-              <React.Fragment>
-                <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
-                />
-                {option.name}
-              </React.Fragment>
-            )}
-            renderInput={params => (
-              <TextField
-                {...params}
-                variant='outlined'
-                label='Catégories'
-                placeholder='Catégorie'
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={6} sm={4}>
-          <Autocomplete
-            multiple
-            noOptionsText="Pas d'options"
-            id='subCategories'
-            key='2'
-            limitTags={2}
-            options={this.state.subCategories}
-            groupBy={subCategory => subCategory.category}
-            disableCloseOnSelect
-            onChange={(event, values) => {
-              if (this.isArrayEmpty(values, 'categories')) {
-                return
-              }
-
-              this.setState({
-                userFilters: {
-                  ...this.state.userFilters,
-                  categories: { filters: [...values], facet: 'category' }
-                }
-              })
-            }}
-            getOptionLabel={subCategory => subCategory.name}
-            renderOption={(option, { selected }) => {
-              return (
-                <React.Fragment>
-                  <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option.name}
-                </React.Fragment>
-              )
-            }}
-            renderInput={params => (
-              <TextField
-                {...params}
-                variant='outlined'
-                label='Sous-catégories'
-                placeholder='Sous-catégorie'
-              />
-            )}
-          />
-        </Grid>
-
+        <Categories handleUpdateCategories={this.handleUpdateCategories} handleUpdateSubCategories={this.handleUpdateSubCategories} parentState={this.state} />
         <SimpleSelect
+          key='tags'
           infos={{ name: 'tags', label: 'Mots-clés', values: this.state.tags }}
           update={this.updateSelectValue}
         />
         <SimpleSelect
+          key='address_name'
           infos={{
             name: 'address_name',
             label: 'Nom du lieu',
@@ -250,6 +140,7 @@ class Sorting extends Component {
           update={this.updateSelectValue}
         />
         <SimpleSelect
+          key='address_zipcode'
           infos={{
             name: 'address_zipcode',
             label: 'Code postal',
@@ -258,6 +149,7 @@ class Sorting extends Component {
           update={this.updateSelectValue}
         />
         <SimpleSelect
+          key='address_city'
           infos={{
             name: 'address_city',
             label: 'Ville',
@@ -266,6 +158,7 @@ class Sorting extends Component {
           update={this.updateSelectValue}
         />
         <CustomSwitch
+          key='pmr'
           update={this.updateSwitchValue}
           infos={{
             name: 'pmr',
@@ -274,6 +167,7 @@ class Sorting extends Component {
           }}
         />
         <CustomSwitch
+          key='blind'
           update={this.updateSwitchValue}
           infos={{
             name: 'blind',
@@ -282,6 +176,7 @@ class Sorting extends Component {
           }}
         />
         <CustomSwitch
+          key='deaf'
           update={this.updateSwitchValue}
           infos={{
             name: 'deaf',
@@ -293,6 +188,7 @@ class Sorting extends Component {
         {this.state.types
           ? this.state.types.map(type => (
             <SimpleSelect
+              key={type.name}
               infos={{
                 name: type.name,
                 label: type.name,
@@ -404,6 +300,50 @@ class Sorting extends Component {
         });
         this.props.updateNHits(response.data.nhits);
       });
+  }
+
+  handleUpdateCategories = (event, categories) => {
+    console.log(categories)
+    if (categories.length === 0) {
+      this.setState({
+        subCategories: [],
+        userFilters: { ...this.state.userFilters, categories: [] }
+      })
+      return;
+    }
+    let tempArray = [];
+    categories.forEach(category => {
+      let subTempArray = category.facets.filter(
+        subCategory =>
+          !this.state.subCategories.includes(subCategory.name)
+      );
+      subTempArray.forEach(
+        subCategory => (subCategory.category = category.name)
+      );
+      tempArray = tempArray.concat(subTempArray)
+    });
+
+    console.log(categories);
+
+    this.setState({
+      subCategories: tempArray,
+      userFilters: {
+        ...this.state.userFilters,
+        categories: { filters: [...categories], facet: 'category' }
+      }
+    });
+  }
+
+  handleUpdateSubCategories = (event, subCategories) => {
+    if (this.isArrayEmpty(subCategories, 'categories')) {
+      return;
+    }
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        categories: { filters: [...subCategories], facet: 'category' }
+      }
+    });
   }
 }
 

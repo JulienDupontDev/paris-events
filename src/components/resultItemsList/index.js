@@ -19,7 +19,7 @@ import EventDetails from '../eventDetails'
  */
 const mapStateToProps = state => {
   const resultItems = getResultItemsList(state)
-  return resultItems
+  return resultItems;
 }
 const useStyles = theme => ({
   root: {
@@ -60,7 +60,7 @@ const toHtml = string => {
  * Composant qui affiche les résultats de recherche sous forme de carte
  */
 class ResultItemsList extends Component {
-  render () {
+  render() {
     const { classes, resultItems } = this.props
 
     return (
@@ -68,58 +68,58 @@ class ResultItemsList extends Component {
         {resultItems.length === 0
           ? 'Pas de résultats'
           : resultItems.map(item => {
-              return (
-                <Grid item xs={10} sm={5} key={item.fields.id}>
-                  <Card>
-                    <CardActionArea>
-                      <CardMedia
-                        component='img'
-                        alt={item.fields.cover_alt}
-                        height='250'
-                        image={item.fields.cover_url}
-                        title='Contemplative Reptile'
-                        className={classes.coverImage}
-                      />
+            return (
+              <Grid item xs={10} sm={5} key={item.fields.id}>
+                <Card>
+                  <CardActionArea>
+                    <CardMedia
+                      component='img'
+                      alt={item.fields.cover_alt}
+                      height='250'
+                      image={item.fields.cover_url}
+                      title='Contemplative Reptile'
+                      className={classes.coverImage}
+                    />
 
-                      <CardContent>
-                        <EventDetails item={item} />
+                    <CardContent>
+                      <EventDetails item={item} />
 
-                        <Typography gutterBottom variant='h5' component='h2'>
-                          {item.fields.title.toUpperCase()}
-                        </Typography>
-                        <Typography
-                          variant='body2'
-                          color='textSecondary'
-                          component='p'
-                          className={classes.itemDescription}
-                        >
-                          {toHtml(item.fields.description)}
-                        </Typography>
-                        <Iframe
-                          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
+                      <Typography gutterBottom variant='h5' component='h2'>
+                        {item.fields.title.toUpperCase()}
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        color='textSecondary'
+                        component='p'
+                        className={classes.itemDescription}
+                      >
+                        {toHtml(item.fields.description)}
+                      </Typography>
+                      <Iframe
+                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
     &q=${item.fields.address_street} ${item.fields.address_city}&zoom=18`}
-                          frameBorder={0}
-                          style={{
-                            border: 0,
-                            minWidth: '100%',
-                            height: '100px'
-                          }}
-                          ariaHidden={false}
-                          allowFullScreen=''
-                        />
-                        <Typography>
-                          {item.fields.price_type}
-                          {item.fields.price_detail
-                            ? ' - ' + item.fields.price_detail
-                            : ''}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions></CardActions>
-                  </Card>
-                </Grid>
-              )
-            })}
+                        frameBorder={0}
+                        style={{
+                          border: 0,
+                          minWidth: '100%',
+                          height: '100px'
+                        }}
+                        ariaHidden={false}
+                        allowFullScreen=''
+                      />
+                      <Typography>
+                        {item.fields.price_type}
+                        {item.fields.price_detail
+                          ? ' - ' + item.fields.price_detail
+                          : ''}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions></CardActions>
+                </Card>
+              </Grid>
+            )
+          })}
       </Grid>
     )
   }
