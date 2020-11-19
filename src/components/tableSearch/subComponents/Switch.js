@@ -8,11 +8,8 @@ import {
 import React, { Component } from 'react'
 
 class CustomSwitch extends Component {
-  constructor (props) {
-    super(props)
-  }
 
-  render () {
+  render() {
     const { value, name, title } = this.props.infos
     return (
       <Grid item>

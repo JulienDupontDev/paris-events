@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { fade, withStyles } from '@material-ui/core/styles';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { updateResultItems, updateNHits } from '../../redux/actions';
@@ -19,46 +17,7 @@ const useStyles = (theme) => ({
     display: 'flex',
     justifyContent: 'center'
   },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto'
-    }
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  inputRoot: {
-    color: 'inherit'
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch'
-    }
-  }
 })
-
-const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
-const checkedIcon = <CheckBoxIcon fontSize='small' />
 
 class Sorting extends Component {
   constructor(props) {
@@ -118,86 +77,88 @@ class Sorting extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
     const { userFilters } = this.state
 
     return (
-      <Grid container spacing={2} className={classes.root}>
-        <SearchInput update={this.handleSearch} />
-        <Categories handleUpdateCategories={this.handleUpdateCategories} handleUpdateSubCategories={this.handleUpdateSubCategories} parentState={this.state} />
-        <SimpleSelect
-          key='tags'
-          infos={{ name: 'tags', label: 'Mots-clés', values: this.state.tags }}
-          update={this.updateSelectValue}
-        />
-        <SimpleSelect
-          key='address_name'
-          infos={{
-            name: 'address_name',
-            label: 'Nom du lieu',
-            values: this.state.places
-          }}
-          update={this.updateSelectValue}
-        />
-        <SimpleSelect
-          key='address_zipcode'
-          infos={{
-            name: 'address_zipcode',
-            label: 'Code postal',
-            values: this.state.postCodes
-          }}
-          update={this.updateSelectValue}
-        />
-        <SimpleSelect
-          key='address_city'
-          infos={{
-            name: 'address_city',
-            label: 'Ville',
-            values: this.state.cities
-          }}
-          update={this.updateSelectValue}
-        />
-        <CustomSwitch
-          key='pmr'
-          update={this.updateSwitchValue}
-          infos={{
-            name: 'pmr',
-            title: 'Mobilité réduite',
-            value: userFilters.pmr.value
-          }}
-        />
-        <CustomSwitch
-          key='blind'
-          update={this.updateSwitchValue}
-          infos={{
-            name: 'blind',
-            title: 'Accès mal voyant',
-            value: userFilters.blind.value
-          }}
-        />
-        <CustomSwitch
-          key='deaf'
-          update={this.updateSwitchValue}
-          infos={{
-            name: 'deaf',
-            title: 'Accès mal entendant',
-            value: userFilters.deaf.value
-          }}
-        />
-        <EventDatePicker update={this.handleDateUpdate} date={this.state.userFilters.selectedDate} />
-        {this.state.types
-          ? this.state.types.map(type => (
-            <SimpleSelect
-              key={type.name}
-              infos={{
-                name: type.name,
-                label: type.name,
-                values: type.facets
-              }}
-              update={this.updateSelectValue}
-            />
-          ))
-          : null}
+      <Grid item>
+        <Grid container spacing={2} className={classes.root}>
+          <SearchInput update={this.handleSearch} />
+          <Categories handleUpdateCategories={this.handleUpdateCategories} handleUpdateSubCategories={this.handleUpdateSubCategories} parentState={this.state} />
+          <SimpleSelect
+            key='tags'
+            infos={{ name: 'tags', label: 'Mots-clés', values: this.state.tags }}
+            update={this.updateSelectValue}
+          />
+          <SimpleSelect
+            key='address_name'
+            infos={{
+              name: 'address_name',
+              label: 'Nom du lieu',
+              values: this.state.places
+            }}
+            update={this.updateSelectValue}
+          />
+          <SimpleSelect
+            key='address_zipcode'
+            infos={{
+              name: 'address_zipcode',
+              label: 'Code postal',
+              values: this.state.postCodes
+            }}
+            update={this.updateSelectValue}
+          />
+          <SimpleSelect
+            key='address_city'
+            infos={{
+              name: 'address_city',
+              label: 'Ville',
+              values: this.state.cities
+            }}
+            update={this.updateSelectValue}
+          />
+          <CustomSwitch
+            key='pmr'
+            update={this.updateSwitchValue}
+            infos={{
+              name: 'pmr',
+              title: 'Mobilité réduite',
+              value: userFilters.pmr.value
+            }}
+          />
+          <CustomSwitch
+            key='blind'
+            update={this.updateSwitchValue}
+            infos={{
+              name: 'blind',
+              title: 'Accès mal voyant',
+              value: userFilters.blind.value
+            }}
+          />
+          <CustomSwitch
+            key='deaf'
+            update={this.updateSwitchValue}
+            infos={{
+              name: 'deaf',
+              title: 'Accès mal entendant',
+              value: userFilters.deaf.value
+            }}
+          />
+          <EventDatePicker update={this.handleDateUpdate} date={this.state.userFilters.selectedDate} />
+          {this.state.types
+            ? this.state.types.map(type => (
+              <SimpleSelect
+                key={type.name}
+                infos={{
+                  name: type.name,
+                  label: type.name,
+                  values: type.facets
+                }}
+                update={this.updateSelectValue}
+              />
+            ))
+            : null}
+        </Grid>
       </Grid>
     )
   }

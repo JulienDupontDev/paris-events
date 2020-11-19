@@ -7,6 +7,7 @@ import EventsMap from '../eventsMap';
 const useStyle = theme => ({
   root: {
     marginTop: "5em",
+    overflowX: 'hidden',
   },
 
 });

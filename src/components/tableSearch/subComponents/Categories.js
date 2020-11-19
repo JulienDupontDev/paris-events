@@ -12,7 +12,7 @@ const checkedIcon = <CheckBoxIcon fontSize='small' />
 class Categories extends Component {
 
   render() {
-    const { subCategories, categories, userFilters } = this.props.parentState;
+    const { subCategories, categories } = this.props.parentState;
 
     return (
       <Grid item xs={12} sm={8}>

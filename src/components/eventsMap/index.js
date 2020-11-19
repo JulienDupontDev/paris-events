@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { CardMedia, CircularProgress, GridListTile, IconButton, Link, Typography, withStyles } from '@material-ui/core';
+import { CircularProgress, IconButton, Link, Typography, withStyles } from '@material-ui/core';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import Leaflet from 'leaflet';
 import { Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { Close, Transform } from '@material-ui/icons';
+import { Close } from '@material-ui/icons';
 
 Leaflet.Icon.Default.imagePath = '../node_modules/leaflet';
 
@@ -141,7 +141,7 @@ class EventsMap extends Component {
                       </ListItem>
                       <ListItem className={classes.listItem}>
                         <Typography className={classes.sectionTitle}>Image de couverture</Typography>
-                        <img src={event.fields.cover_url} style={{ width: '100%' }} />
+                        <img src={event.fields.cover_url} style={{ width: '100%' }} alt={event.fields.cover.filename} />
                       </ListItem>
                       <ListItem className={classes.listItem}>
                         <Typography className={classes.sectionTitle}>Accès PMR</Typography>

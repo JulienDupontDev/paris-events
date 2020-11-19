@@ -37,23 +37,28 @@ const useStyles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    padding: '10px'
+    padding: '10px',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column-reverse',
+      justifyContent: 'center',
+      padding: '20px',
+    },
   },
   sectionTitle: {
-    fontWeigth: 'bold'
+    fontWeigth: 'bold',
   },
   containerColumn: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   leafletContainer: {
-    heigth: '200px'
+    heigth: '200px',
   },
   popUp: {
     maxHeight: '200px',
     overflowY: 'auto',
-    maxWidth: '200px'
-  }
+    maxWidth: '200px',
+  },
 })
 
 /**
@@ -66,12 +71,12 @@ const toHtml = string => {
 
   return doc.body.innerText;
 }
-const Transition = React.forwardRef(function Transition (props, ref) {
+const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 });
 
 class EventDetails extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       open: false,
@@ -82,7 +87,7 @@ class EventDetails extends Component {
   handleClose = () => this.setState({ open: false });
   handleOpen = () => this.setState({ open: true });
 
-  render () {
+  render() {
     const { item, classes } = this.props;
 
     return (
@@ -116,8 +121,8 @@ class EventDetails extends Component {
             </Button> */}
             </Toolbar>
           </AppBar>
-          <Grid className={classes.grid} container spacing={2}>
-            <Grid item xs={12} sm={6}>
+          <Grid className={classes.grid} container spacing={2} >
+            <Grid item xs={12} md={6}>
               <Grid container className={classes.containerColumn}>
                 <Grid item xs={12} sm={10}>
                   <CardMedia src={item.fields.cover_url} component='img' />
@@ -153,8 +158,8 @@ class EventDetails extends Component {
                         </IconButton>
                       </ListItem>
                     ) : (
-                      ''
-                    )}
+                        ''
+                      )}
                     {item.fields.contact_phone ? (
                       <ListItem style={{ width: 'min-content' }}>
                         <IconButton href={'tel:' + item.fields.contact_phone}>
@@ -162,8 +167,8 @@ class EventDetails extends Component {
                         </IconButton>
                       </ListItem>
                     ) : (
-                      ''
-                    )}
+                        ''
+                      )}
                     {item.fields.contact_mail ? (
                       <ListItem style={{ width: 'min-content' }}>
                         <IconButton
@@ -175,8 +180,8 @@ class EventDetails extends Component {
                         </IconButton>
                       </ListItem>
                     ) : (
-                      ''
-                    )}
+                        ''
+                      )}
                   </List>
                 </Grid>
                 <Grid item xs={10}>
@@ -216,12 +221,12 @@ class EventDetails extends Component {
                       </Marker>
                     </MapContainer>
                   ) : (
-                    'coucou'
-                  )}
+                      'coucou'
+                    )}
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <Grid container spacing={2} className={classes.containerColumn}>
                 <Grid item>
                   <Typography className={classes.sectionTitle}>
