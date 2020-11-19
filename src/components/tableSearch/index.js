@@ -205,7 +205,7 @@ class Sorting extends Component {
   isArrayEmpty = (values, objectName) => {
     if (values.length === 0) {
       this.setState({
-        [objectName]: [],
+        // [objectName]: [],
         userFilters: { ...this.state.userFilters, [objectName]: [] }
       });
 
@@ -322,6 +322,7 @@ class Sorting extends Component {
 
     this.setState({
       subCategories: tempArray,
+      savedCategories: { filters: [...categories], facet: 'category' },
       userFilters: {
         ...this.state.userFilters,
         categories: { filters: [...categories], facet: 'category' }
@@ -331,6 +332,7 @@ class Sorting extends Component {
 
   handleUpdateSubCategories = (event, subCategories) => {
     if (this.isArrayEmpty(subCategories, 'categories')) {
+      this.setState({ ...this.state, userFilters: { ...this.state.userFilters, categories: this.state.savedCategories } })
       return;
     }
     this.setState({
