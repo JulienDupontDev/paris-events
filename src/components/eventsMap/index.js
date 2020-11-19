@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { IconButton, Typography } from '@material-ui/core';
+import { CardMedia, CircularProgress, GridListTile, IconButton, Link, Typography, withStyles } from '@material-ui/core';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
-import { connect } from 'react-redux';
 import 'leaflet/dist/leaflet.css';
 import Leaflet from 'leaflet';
-import { getNhits } from '../../redux/selectors';
 import { Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { Close } from '@material-ui/icons';
+import { Close, Transform } from '@material-ui/icons';
 
 Leaflet.Icon.Default.imagePath = '../node_modules/leaflet';
 
@@ -22,14 +20,23 @@ Leaflet.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 })
 
-/**
- * Recupères les résultats dans le store redux
- * @param {*} state
- */
-const mapStateToProps = state => {
-  const nHits = getNhits(state);
-  return nHits;
-}
+const useStyles = () => ({
+  mapContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    overflow: 'none',
+  },
+  sectionTitle: {
+    fontWeight: 'bold',
+  },
+  listItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: '8pt',
+  }
+});
+
+const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 class EventsMap extends Component {
   constructor(props) {
@@ -47,7 +54,7 @@ class EventsMap extends Component {
   handleDialogShow = () => this.setState({ eventsIframeOpened: !this.state.eventsIframeOpened });
   render() {
     const { events, center } = this.state;
-
+    const { classes } = this.props;
     return (
       <Grid item xs={12} sm={12}>
         <Typography>Bienvenue ! Recherchez des évènements à Paris ci-dessous.</Typography>
@@ -62,15 +69,19 @@ class EventsMap extends Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{this.state.loading ? "Chargement des données" : "Evènements à Paris"}
-            <IconButton onClick={this.handleDialogShow}>
+          <DialogTitle id="alert-dialog-title">{this.state.loading ? (
+            <Typography>
+              Chargement des données
+            </Typography>
+          ) : "Evènements à Paris"}
+            <IconButton style={{ position: 'absolute', right: '0', top: '0' }} onClick={this.handleDialogShow}>
               <Close />
             </IconButton>
           </DialogTitle>
-          <DialogContent>
-            <MapContainer
+          <DialogContent className={this.state.loading ? classes.mapContainer : ''} >
+            {!this.state.loading ? <MapContainer
               center={center}
-              zoom={18}
+              zoom={11}
               scrollWheelZoom
               style={{ height: '400px', width: 'inherit' }}
             >
@@ -87,46 +98,141 @@ class EventsMap extends Component {
                     <List style={{
                       maxHeight: '200px',
                       overflowY: 'auto',
-                      maxWidth: '200px'
+                      maxWidth: '200px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      fontSize: '8pt',
                     }}>
-                      <ListItem>{event.fields.address_name}</ListItem>
                       <ListItem>
-                        <Typography>
+                        <Typography style={{ fontWeight: 'bold' }}>
+                          {event.fields.title}
+                        </Typography>
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>
+                          Adresse
+                        </Typography>
+                        <Link href={'https://google.com/maps/search/' + event.fields.address_street + ' ' + event.fields.address_city + ' ' + event.fields.address_zipcode}
+                          target='_blank' rel='noreferrer'>
                           {event.fields.address_street},
                   {event.fields.address_zipcode},
                   {event.fields.address_city}
-                        </Typography>
+                        </Link>
                       </ListItem>
-                      <ListItem></ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Chapeau</Typography>
+                        {event.fields.lead_text}
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>URL</Typography>
+                        <Link href={event.fields.url} target='_blank' rel='noreferrer'>{event.fields.url}</Link>
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Catégorie</Typography>
+                        {event.fields.category}
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Date de début</Typography>
+                        {new Date(event.fields.date_start).toLocaleDateString('fr-FR', dateOptions)}
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Date de fin</Typography>
+                        {new Date(event.fields.date_end).toLocaleDateString('fr-FR', dateOptions)}
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Image de couverture</Typography>
+                        <img src={event.fields.cover_url} style={{ width: '100%' }} />
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Accès PMR</Typography>
+                        {event.fields.pmr}
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Accès mal entendant</Typography>
+                        {event.fields.deaf}
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Accès mal voyant</Typography>
+                        {event.fields.blind}
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Type de prix</Typography>
+                        {event.fields.price_type}
+                      </ListItem>
+                      {event.fields.price_detail ?
+                        <ListItem className={classes.listItem}>
+                          <Typography className={classes.sectionTitle}>Détail du prix</Typography>
+                          {event.fields.price_detail}
+                        </ListItem>
+                        : ''
+                      }
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Nom de contact</Typography>
+                        {event.fields.contact_name}
+                      </ListItem>
+                      {event.fields.contact_phone ?
+                        <ListItem className={classes.listItem}>
+                          <Typography className={classes.sectionTitle}>Téléphone de contact</Typography>
+                          {event.fields.contact_phone}
+                        </ListItem>
+                        : ''
+                      }
+                      {event.fields.contact_mail ?
+                        <ListItem className={classes.listItem}>
+                          <Typography className={classes.sectionTitle}>Email de contact</Typography>
+                          {event.fields.contact_mail}
+                        </ListItem>
+                        : ''
+                      }
+                      {event.fields.contact_facebook ?
+                        <ListItem className={classes.listItem}>
+                          <Typography className={classes.sectionTitle}>Contact Facebook</Typography>
+                          <Link href={event.fields.contact_facebook} target='_blank' rel='noreferrer'>
+                            Cliquez pour voir la page
+                          </Link>
+                        </ListItem>
+                        : ''
+                      }
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Type d'accès</Typography>
+                        {event.fields.access_type}
+                      </ListItem>
+                      {event.fields.access_link ? <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Url de réservation</Typography>
+                        <Link href={event.fields.access_link} target='_blank' rel='noreferrer'>
+                          Cliquez ici pour réserver
+                        </Link>
+                      </ListItem> : ''
+                      }
                     </List>
                   </Popup>
                 </Marker>
               })
               }
             </MapContainer>
+              : <CircularProgress size={40} />
+            }
           </DialogContent>
         </Dialog>
       </Grid>
-
     );
   }
 
   async getEvents() {
     const baseQuery = 'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&q=&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&';
 
-    console.log(this.props.nHits)
     await axios.get(baseQuery)
       .then(async (response) => {
-        await axios.get(baseQuery.concat('rows=' + response.data.nhits)).then((lastResponse) => {
-          console.log(lastResponse)
-          const { records } = lastResponse.data;
-          this.setState({ events: records.filter((record) => record.geometry) });
-          this.setState({ loading: false });
-        })
+        await axios.get(baseQuery.concat('rows=10' /*+ response.data.nhits*/))
+          .then((lastResponse) => {
+            const { records } = lastResponse.data;
+            this.setState({ events: records.filter((record) => record.geometry) });
+            this.setState({ loading: false });
+          })
           .catch(() => console.log('erreur'))
       })
       .catch((error) => console.log(error));
   }
 }
 
-export default connect(mapStateToProps)(EventsMap);
+export default withStyles(useStyles)(EventsMap);

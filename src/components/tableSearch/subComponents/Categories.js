@@ -14,9 +14,8 @@ class Categories extends Component {
   render() {
     const { subCategories, categories, userFilters } = this.props.parentState;
 
-    console.log(subCategories, categories, userFilters)
     return (
-      <Grid item xs={6} sm={8}>
+      <Grid item xs={12} sm={8}>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={6}>
             <Autocomplete

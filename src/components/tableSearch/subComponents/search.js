@@ -54,10 +54,10 @@ class SearchInput extends Component {
           </div>
           <InputBase
             placeholder='Recherche'
-            // className={{
-            //   root: classes.inputRoot,
-            //   input: classes.inputInput,
-            // }}
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
             onChange={(event) => update(event.target.value)}
             inputProps={{ 'aria-label': 'Rechercher' }}
           />

@@ -257,8 +257,6 @@ class Sorting extends Component {
     Object.values(this.state.userFilters).forEach(value => {
       if (value.filters && value.filters.length !== 0) {
         query += `&facet=${value.facet}`;
-        console.log('lalala');
-
         value.filters.map(
           filter =>
             (query += `&refine.${value.facet}=${encodeURIComponent(
@@ -303,7 +301,6 @@ class Sorting extends Component {
   }
 
   handleUpdateCategories = (event, categories) => {
-    console.log(categories)
     if (categories.length === 0) {
       this.setState({
         subCategories: [],
@@ -322,8 +319,6 @@ class Sorting extends Component {
       );
       tempArray = tempArray.concat(subTempArray)
     });
-
-    console.log(categories);
 
     this.setState({
       subCategories: tempArray,
