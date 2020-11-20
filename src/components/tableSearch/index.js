@@ -8,7 +8,7 @@ import CustomSwitch from './subComponents/Switch';
 import SimpleSelect from './subComponents/SimpleSelect';
 import SearchInput from './subComponents/search';
 import facetsQuery from './facets.json';
-import EventDatePicker from './datePicker';
+import EventDatePicker from './subComponents/EventDatePicker';
 import Categories from './subComponents/Categories';
 
 const useStyles = (theme) => ({
@@ -17,7 +17,7 @@ const useStyles = (theme) => ({
     display: 'flex',
     justifyContent: 'center'
   },
-})
+});
 
 class Sorting extends Component {
   constructor(props) {
@@ -29,6 +29,8 @@ class Sorting extends Component {
       cities: [],
       places: [],
       categories: [],
+      price_types: [],
+      access_types: [],
       tags: [],
       subCategories: [],
       userFilters: {
@@ -64,7 +66,8 @@ class Sorting extends Component {
         this.setState({
           categories: facets.filter(facet => facet.name === 'category')[0]
             .facets,
-          types: facets.filter(facet => facet.name.includes('type')),
+          access_types: facets.filter(facet => facet.name === 'access_type')[0].facets,
+          price_types: facets.filter(facet => facet.name === 'price_type')[0].facets,
           postCodes: facets.filter(facet => facet.name === 'address_zipcode')[0]
             .facets,
           tags: facets.filter(facet => facet.name === 'tags')[0].facets,
@@ -144,20 +147,26 @@ class Sorting extends Component {
               value: userFilters.deaf.value
             }}
           />
+          <SimpleSelect
+            key='price_type'
+            infos={{
+              name: 'price_type',
+              label: 'Type de prix',
+              values: this.state.price_types
+            }}
+            update={this.updateSelectValue}
+          />
+          <SimpleSelect
+            key='access_type'
+            infos={{
+              name: 'access_type',
+              label: 'Type d\'accès',
+              values: this.state.access_types
+            }}
+            update={this.updateSelectValue}
+          />
+
           <EventDatePicker update={this.handleDateUpdate} date={this.state.userFilters.selectedDate} />
-          {this.state.types
-            ? this.state.types.map(type => (
-              <SimpleSelect
-                key={type.name}
-                infos={{
-                  name: type.name,
-                  label: type.name,
-                  values: type.facets
-                }}
-                update={this.updateSelectValue}
-              />
-            ))
-            : null}
         </Grid>
       </Grid>
     )
@@ -166,13 +175,10 @@ class Sorting extends Component {
   isArrayEmpty = (values, objectName) => {
     if (values.length === 0) {
       this.setState({
-        // [objectName]: [],
         userFilters: { ...this.state.userFilters, [objectName]: [] }
       });
-
       return true;
     }
-
     return false;
   }
 
@@ -180,7 +186,7 @@ class Sorting extends Component {
     if (values.length === 0) {
       this.setState({
         userFilters: { ...this.state.userFilters, [object]: [] }
-      })
+      });
       return;
     }
     this.setState({
@@ -198,8 +204,7 @@ class Sorting extends Component {
     this.setState({
       userFilters: {
         ...this.state.userFilters,
-        selectedDate: { value: newDate.toISOString() },
-        facet: 'date_starte'
+        selectedDate: { value: (newDate.setDate(newDate.getDate() + 1)).toISOString(), facet: 'date_start' },
       }
     });
   }

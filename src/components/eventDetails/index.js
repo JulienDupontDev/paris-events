@@ -89,6 +89,7 @@ class EventDetails extends Component {
 
   render() {
     const { item, classes } = this.props;
+    console.log(item)
 
     return (
       <div>

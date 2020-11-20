@@ -12,7 +12,7 @@ class CustomSwitch extends Component {
   render() {
     const { value, name, title } = this.props.infos
     return (
-      <Grid item>
+      <Grid item xs={10} sm={4}>
         <FormControl component='fieldset'>
           <FormGroup>
             <FormControlLabel

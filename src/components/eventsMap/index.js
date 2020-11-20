@@ -33,12 +33,18 @@ const useStyles = () => ({
     display: 'flex',
     flexDirection: 'column',
     fontSize: '8pt',
+    wordWrap: 'anywhere',
   }
 });
 
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 class EventsMap extends Component {
+  /**
+   * constructeur qui déclare le state du composant
+   * On définit le centre de la carte aux coordonnées du centre de Paris
+   * @param {*} props 
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -51,8 +57,12 @@ class EventsMap extends Component {
     this.getEvents();
   }
 
+  /**
+   * Permet d'afficher ou de fermer le modal
+   */
   handleDialogShow = () => this.setState({ eventsIframeOpened: !this.state.eventsIframeOpened });
-  render() {
+
+  render = () => {
     const { events, center } = this.state;
     const { classes } = this.props;
     return (
@@ -109,17 +119,6 @@ class EventsMap extends Component {
                         </Typography>
                       </ListItem>
                       <ListItem className={classes.listItem}>
-                        <Typography className={classes.sectionTitle}>
-                          Adresse
-                        </Typography>
-                        <Link href={'https://google.com/maps/search/' + event.fields.address_street + ' ' + event.fields.address_city + ' ' + event.fields.address_zipcode}
-                          target='_blank' rel='noreferrer'>
-                          {event.fields.address_street},
-                  {event.fields.address_zipcode},
-                  {event.fields.address_city}
-                        </Link>
-                      </ListItem>
-                      <ListItem className={classes.listItem}>
                         <Typography className={classes.sectionTitle}>Chapeau</Typography>
                         {event.fields.lead_text}
                       </ListItem>
@@ -142,6 +141,17 @@ class EventsMap extends Component {
                       <ListItem className={classes.listItem}>
                         <Typography className={classes.sectionTitle}>Image de couverture</Typography>
                         <img src={event.fields.cover_url} style={{ width: '100%' }} alt={event.fields.cover.filename} />
+                      </ListItem>
+                      <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>
+                          Adresse
+                        </Typography>
+                        <Link href={'https://google.com/maps/search/' + event.fields.address_street + ' ' + event.fields.address_city + ' ' + event.fields.address_zipcode}
+                          target='_blank' rel='noreferrer'>
+                          {event.fields.address_street},
+                  {event.fields.address_zipcode},
+                  {event.fields.address_city}
+                        </Link>
                       </ListItem>
                       <ListItem className={classes.listItem}>
                         <Typography className={classes.sectionTitle}>Accès PMR</Typography>
@@ -204,6 +214,11 @@ class EventsMap extends Component {
                         </Link>
                       </ListItem> : ''
                       }
+                      {event.fields.updated_at ? <ListItem className={classes.listItem}>
+                        <Typography className={classes.sectionTitle}>Dernière mise à jour</Typography>
+                        {(new Date(event.fields.updated_at)).toLocaleDateString('fr-FR', dateOptions)}
+                      </ListItem> : ''
+                      }
                     </List>
                   </Popup>
                 </Marker>
@@ -218,7 +233,12 @@ class EventsMap extends Component {
     );
   }
 
-  async getEvents() {
+  /**
+   * Permet d'aller récupérer d'une part le nombre d'évènements disponibles 
+   * puis de récupérer tous les évènements grâce au nombre reçu qui sera 
+   * passé à row=$nombre dans la requête
+   */
+  getEvents = async () => {
     const baseQuery = 'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&q=&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&';
 
     await axios.get(baseQuery)
