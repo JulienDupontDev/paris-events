@@ -15,6 +15,7 @@ import { Facebook, Mail, Phone } from '@material-ui/icons';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import Leaflet from 'leaflet';
+import Iframe from 'react-iframe';
 
 Leaflet.Icon.Default.imagePath = '../node_modules/leaflet';
 
@@ -132,22 +133,24 @@ class EventDetails extends Component {
                   <Typography className={classes.sectionTitle}>
                     Lien de l'évènement
                   </Typography>
-                  <Typography>{item.fields.contact_url}</Typography>
+                  <Link href={item.fields.url} rel='noreferrer' target='_blank'>{item.fields.url}</Link>
                 </Grid>
-                <Grid item>
-                  <Typography className={classes.sectionTitle}>
-                    Lien de réservation
+                {item.fields.access_link ?
+                  <Grid item>
+                    <Typography className={classes.sectionTitle}>
+                      Lien de réservation
                   </Typography>
-                  <Link
-                    href={item.fields.access_link}
-                    rel='noreferrer'
-                    target='_blank'
-                  >
-                    {item.fields.access_link}
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <List style={{ display: 'flex' }}>
+                    <Link
+                      href={item.fields.access_link}
+                      rel='noreferrer'
+                      target='_blank'
+                    >
+                      {item.fields.access_link}
+                    </Link>
+                  </Grid>
+                  : ''}
+                <Grid item xs={12}>
+                  <List style={{ display: 'flex', justifyContent: 'center' }}>
                     {item.fields.contact_facebook ? (
                       <ListItem style={{ width: 'min-content' }}>
                         <IconButton
@@ -222,7 +225,18 @@ class EventDetails extends Component {
                       </Marker>
                     </MapContainer>
                   ) : (
-                      'coucou'
+                      <Iframe
+                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
+    &q=${item.fields.address_street} ${item.fields.address_city}&zoom=18`}
+                        frameBorder={0}
+                        style={{
+                          border: 0,
+                          width: 'inherit',
+                          height: '300px'
+                        }}
+                        ariaHidden={false}
+                        allowFullScreen=''
+                      />
                     )}
                 </Grid>
               </Grid>
@@ -266,6 +280,13 @@ class EventDetails extends Component {
                   <Typography>{item.fields.price_type}</Typography>
                 </Grid>
               </Grid>
+              {item.fields.price_detail ?
+                <Grid item>
+                  <Typography>Détail du prix</Typography>
+                  {item.fields.price_detail}
+                </Grid>
+                : ''
+              }
             </Grid>
           </Grid>
         </Dialog>

@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
  * Permet d'afficher une fleche pour retourner en haut de la page
  * @param {*} props
  */
-function ScrollTop (props) {
+function ScrollTop(props) {
   const { children, window } = props
   const classes = useStyles()
   const trigger = useScrollTrigger({
@@ -33,7 +33,11 @@ function ScrollTop (props) {
     threshold: 100
   })
 
-  const handleClick = event => {
+  /**
+   * Gere le click sur le bouton haut de page
+   * @param {*} event 
+   */
+  const handleClick = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(
       '#back-to-top-anchor'
     )
@@ -54,14 +58,10 @@ function ScrollTop (props) {
 
 ScrollTop.propTypes = {
   children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func
 }
 
-export default function BackToTop (props) {
+export default function BackToTop(props) {
   return (
     <React.Fragment>
       <CssBaseline />

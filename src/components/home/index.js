@@ -15,9 +15,6 @@ const useStyle = theme => ({
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      eventsIframeOpened: false,
-    }
   }
 
 
@@ -29,7 +26,7 @@ class Home extends Component {
         <EventsMap />
         <Sorting />
         <Grid item sm={12}>
-          <ResultPagination test="coucou" />
+          <ResultPagination />
         </Grid>
       </Grid>
     );
