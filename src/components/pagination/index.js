@@ -8,7 +8,8 @@ import ResultItemsList from '../resultItemsList'
 import { getResultItemsList, getNhits } from '../../redux/selectors'
 
 /**
- * Récupères les résultats de recherche ainsi que le nombre total de
+ * @method
+ *@description Récupères les résultats de recherche ainsi que le nombre total de
  * @param {*} state
  */
 const mapStateToProps = state => {
@@ -28,8 +29,15 @@ const useStyles = theme => ({
   }
 })
 
+/**
+ * @class ResultPagination
+ * @component
+ * @desription Contient la pagination et l'appel du composant 
+ * affichant les résultats de recherche
+ * Est connecté au store redux
+ */
 class ResultPagination extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       totalHits: this.props.nHits.nHits,
@@ -37,7 +45,8 @@ class ResultPagination extends Component {
     }
   }
   /**
-   * Permet de remettre la page par défaut à 1 si le nombre de résultats a changé
+   * @method
+   * @description Permet de remettre la page par défaut à 1 si le nombre de résultats a changé
    */
   componentDidUpdate = () => {
     if (this.state.totalHits !== Math.floor(this.props.nHits.nHits / 10) + 1) {
@@ -49,7 +58,8 @@ class ResultPagination extends Component {
     }
   }
   /**
-   * Va récupérer les résultats en fonction de la page demandée en reprennant la requête existante
+   * @method
+   * @description Va récupérer les résultats en fonction de la page demandée en reprennant la requête existante
    * @param {*} event
    * @param {int} page
    */
@@ -57,10 +67,10 @@ class ResultPagination extends Component {
     await axios
       .get(
         'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-' +
-          this.props.resultItems.query.replace(
-            /start=(\d*)/,
-            `start=${(page - 1) * 10}`
-          )
+        this.props.resultItems.query.replace(
+          /start=(\d*)/,
+          `start=${(page - 1) * 10}`
+        )
       )
       .then(response => {
         // console.log(response)
@@ -74,7 +84,10 @@ class ResultPagination extends Component {
       })
   }
 
-  render () {
+  /**
+   * @method
+   */
+  render() {
     const { classes } = this.props
     return (
       <Grid container className={classes.root}>

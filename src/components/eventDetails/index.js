@@ -63,7 +63,8 @@ const useStyles = theme => ({
 })
 
 /**
- * Permet de reformatter la description car les données ne se tranforment pas directement en HTML toutes seules
+ * @method
+ * @description Permet de reformatter la description car les données ne se tranforment pas directement en HTML toutes seules
  * @param {*} string
  */
 const toHtml = string => {
@@ -76,6 +77,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />
 });
 
+/**
+ * @class 
+ * @component
+ * @description Affiche un dialogue avec les informations détaillées de l'évènement
+ */
 class EventDetails extends Component {
   constructor(props) {
     super(props);
@@ -85,7 +91,16 @@ class EventDetails extends Component {
     }
   }
 
+  /**
+   * @method
+   * @description Permet de fermer le dialog
+   */
   handleClose = () => this.setState({ open: false });
+
+  /**
+   * @method
+   * @description Permet d'ouvrir le dialog'
+   */
   handleOpen = () => this.setState({ open: true });
 
   render() {

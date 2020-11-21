@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 /**
- * Permet d'afficher une fleche pour retourner en haut de la page
+ * @method
+ * @description Permet d'afficher une fleche pour retourner en haut de la page
  * @param {*} props
  */
 function ScrollTop(props) {
@@ -35,6 +36,7 @@ function ScrollTop(props) {
 
   /**
    * Gere le click sur le bouton haut de page
+   * @method
    * @param {*} event 
    */
   const handleClick = (event) => {
@@ -60,8 +62,12 @@ ScrollTop.propTypes = {
   children: PropTypes.element.isRequired,
   window: PropTypes.func
 }
-
-export default function BackToTop(props) {
+/**
+ * @class Navbar
+ * @component
+ * @param {*} props 
+ */
+export default function Navbar(props) {
   return (
     <React.Fragment>
       <CssBaseline />

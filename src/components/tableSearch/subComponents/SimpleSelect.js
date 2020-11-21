@@ -6,6 +6,11 @@ import React, { Component } from 'react';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import { TextField } from '@material-ui/core';
 
+/**
+ * @class
+ * @component
+ * @description Classe générique pour les select avec autocompletion 
+ */
 class SimpleSelect extends Component {
   render() {
     const { label, name, values } = this.props.infos

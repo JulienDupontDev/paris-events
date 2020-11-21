@@ -42,6 +42,11 @@ const useStyles = (theme) => ({
   }
 })
 
+/**
+ * @class
+ * @component
+ * @description Composant qui permet la recherche via une saisie utilisateur
+ */
 class SearchInput extends Component {
   render() {
     const { update, classes } = this.props;

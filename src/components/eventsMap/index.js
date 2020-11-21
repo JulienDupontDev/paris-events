@@ -39,9 +39,15 @@ const useStyles = () => ({
 
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
+/**
+ * @class
+ * @component
+ * @description Carte contenu dans un dialogue qui affiche les évènements disponibles à Paris
+ */
 class EventsMap extends Component {
   /**
-   * constructeur qui déclare le state du composant
+   *  @constructor
+   * @description constructeur qui déclare le state du composant
    * On définit le centre de la carte aux coordonnées du centre de Paris
    * @param {*} props 
    */
@@ -58,7 +64,8 @@ class EventsMap extends Component {
   }
 
   /**
-   * Permet d'afficher ou de fermer le modal
+   * @method
+   * @description Permet d'afficher ou de fermer le modal
    */
   handleDialogShow = () => this.setState({ eventsIframeOpened: !this.state.eventsIframeOpened });
 
@@ -234,9 +241,8 @@ class EventsMap extends Component {
   }
 
   /**
-   * Permet d'aller récupérer d'une part le nombre d'évènements disponibles 
-   * puis de récupérer tous les évènements grâce au nombre reçu qui sera 
-   * passé à row=$nombre dans la requête
+   * @method
+   * @description Permet d'aller récupérer d'une part le nombre d'évènements disponibles puis de récupérer tous les évènements grâce au nombre reçu qui sera passé à row=$nombre dans la requête
    */
   getEvents = async () => {
     const baseQuery = 'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&q=&facet=category&facet=tags&facet=address_name&facet=address_zipcode&facet=address_city&facet=pmr&facet=blind&facet=deaf&facet=access_type&facet=price_type&';

@@ -7,6 +7,11 @@ import {
 } from '@material-ui/core'
 import React, { Component } from 'react'
 
+/**
+ * @class
+ * @component
+ * @description Classe générique pour champs de type switch
+ */
 class CustomSwitch extends Component {
 
   render() {

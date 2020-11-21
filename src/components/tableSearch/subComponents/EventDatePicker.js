@@ -6,6 +6,12 @@ import {
 } from '@material-ui/pickers';
 import { Grid } from '@material-ui/core';
 
+/**
+ * @class
+ * @component
+ * @description Sélecteur de date pour la recherche d'évènements
+ * 
+ */
 class EventDatePicker extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +40,11 @@ class EventDatePicker extends Component {
     );
   }
 
+  /**
+   * @method
+   * @description Vérifies si la date envoyée par le picker est une date valide et exécute la fonction pour mettre à jour la date dans les paramètres de recherche 
+   * @param {date} date 
+   */
   checkDate = (date) => {
     if (Object.prototype.toString.call(date) === "[object Date]") {
       if (!isNaN(date.getTime())) {  // d.valueOf() could also work

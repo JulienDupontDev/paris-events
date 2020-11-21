@@ -9,6 +9,11 @@ import Grid from '@material-ui/core/Grid';
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
 const checkedIcon = <CheckBoxIcon fontSize='small' />
 
+/**
+ * @class Categories
+ * @component
+ * @description regroupe le filtre de catégories et de sous catégories 
+ */
 class Categories extends Component {
 
   render() {
@@ -88,5 +93,4 @@ class Categories extends Component {
     );
   }
 }
-
 export default Categories;

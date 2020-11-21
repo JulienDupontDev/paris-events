@@ -57,7 +57,9 @@ const toHtml = string => {
 }
 
 /**
- * Composant qui affiche les résultats de recherche sous forme de carte
+ * @class ResultItemsList
+ * @component
+ * @description Composant qui affiche les résultats de recherche sous forme de carte
  */
 class ResultItemsList extends Component {
   render() {

@@ -12,6 +12,11 @@ const useStyle = theme => ({
 
 });
 
+/**
+ * @class Home
+ * @component
+ * @description Page comprenant tous les composants utiles à l'application
+ */
 class Home extends Component {
   constructor(props) {
     super(props);
