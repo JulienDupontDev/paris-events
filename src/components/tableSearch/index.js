@@ -6,7 +6,7 @@ import { updateResultItems, updateNHits } from '../../redux/actions';
 import axios from 'axios';
 import CustomSwitch from './subComponents/Switch';
 import SimpleSelect from './subComponents/SimpleSelect';
-import SearchInput from './subComponents/search';
+import SearchInput from './subComponents/Search';
 import facetsQuery from './facets.json';
 import EventDatePicker from './subComponents/EventDatePicker';
 import Categories from './subComponents/Categories';
@@ -234,7 +234,7 @@ class Sorting extends Component {
     this.setState({
       userFilters: {
         ...this.state.userFilters,
-        selectedDate: { value: (newDate.setDate(newDate.getDate() + 1)).toISOString(), facet: 'date_start' },
+        selectedDate: { value: new Date(newDate).toISOString(), facet: 'date_start' },
       }
     });
   }
@@ -321,7 +321,7 @@ class Sorting extends Component {
    * @description Mets à jour les catégories dans les résultats de recherche 
    * et mets à jour les sous -catégories disponibles 
    * @param {*} event 
-   * @param {*} categories 
+   * @param {object[]} categories 
    */
   handleUpdateCategories = (event, categories) => {
     if (categories.length === 0) {
@@ -359,7 +359,7 @@ class Sorting extends Component {
    * Si aucune alors on remet les catégories choisies seulement
    * dans les filtres de recherche
    * @param {*} event 
-   * @param {*} subCategories 
+   * @param {object[]} subCategories 
    */
   handleUpdateSubCategories = (event, subCategories) => {
     if (this.isArrayEmpty(subCategories, 'categories')) {

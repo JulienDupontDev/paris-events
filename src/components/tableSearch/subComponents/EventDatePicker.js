@@ -47,7 +47,7 @@ class EventDatePicker extends Component {
    */
   checkDate = (date) => {
     if (Object.prototype.toString.call(date) === "[object Date]") {
-      if (!isNaN(date.getTime())) {  // d.valueOf() could also work
+      if (!isNaN(date.getTime())) {
         this.props.update(date);
       }
     }

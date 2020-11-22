@@ -37,7 +37,7 @@ const useStyles = (theme) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch'
+      width: '100ch'
     }
   }
 })

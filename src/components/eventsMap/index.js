@@ -25,6 +25,7 @@ const useStyles = () => ({
     display: 'flex',
     justifyContent: 'center',
     overflow: 'none',
+    height: '400px',
   },
   sectionTitle: {
     fontWeight: 'bold',
@@ -34,7 +35,7 @@ const useStyles = () => ({
     flexDirection: 'column',
     fontSize: '8pt',
     wordWrap: 'anywhere',
-  }
+  },
 });
 
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -249,7 +250,7 @@ class EventsMap extends Component {
 
     await axios.get(baseQuery)
       .then(async (response) => {
-        await axios.get(baseQuery.concat('rows=10' /*+ response.data.nhits*/))
+        await axios.get(baseQuery.concat('rows=' + response.data.nhits))
           .then((lastResponse) => {
             const { records } = lastResponse.data;
             this.setState({ events: records.filter((record) => record.geometry) });

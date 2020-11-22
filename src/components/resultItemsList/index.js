@@ -82,10 +82,7 @@ class ResultItemsList extends Component {
                       title='Contemplative Reptile'
                       className={classes.coverImage}
                     />
-
                     <CardContent>
-                      <EventDetails item={item} />
-
                       <Typography gutterBottom variant='h5' component='h2'>
                         {item.fields.title.toUpperCase()}
                       </Typography>
@@ -117,7 +114,9 @@ class ResultItemsList extends Component {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions></CardActions>
+                  <CardActions>
+                    <EventDetails item={item} />
+                  </CardActions>
                 </Card>
               </Grid>
             )
