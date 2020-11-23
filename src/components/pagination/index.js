@@ -73,7 +73,6 @@ class ResultPagination extends Component {
         )
       )
       .then(response => {
-        // console.log(response)
         this.props.updateResultItems({
           results: response.data.records,
           query: this.props.resultItems.query

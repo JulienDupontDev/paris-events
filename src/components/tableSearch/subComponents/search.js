@@ -72,5 +72,4 @@ class SearchInput extends Component {
   }
 }
 
-export default withStyles(useStyles
-)(SearchInput);
+export default withStyles(useStyles)(SearchInput);
