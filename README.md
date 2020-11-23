@@ -1,51 +1,168 @@
-# Paris évènements 
 
-## Contexte 
+# Paris évènements
 
+
+## Sommaire 
+- A propos du projet
+	- Technologies  
+- Mise en place
+  - Prérequis 
+  - Installation
+- Utilisation 
+- Fonctionnalités
+
+## A propos du projet
+  
 Le site web Paris évènements permet aux utilisateur de rechercher les évènements disponibles sur Paris et dans la région parisienne en fonction de filtres qu'ils peuvent choisir, mis à leur disposition.
+
+[![readme-image.png](https://i.postimg.cc/05bZN1bp/readme-image.png)](https://postimg.cc/c6GfDj7H)
+### Technologies
+
+## Getting Started
+### Prérequis 
+- Node.js (>=10)
+- Yarn
+- git 
+
+### Installation 
+
+1. Cloner le répertoire
+`git clone https://github.com/JulienDupontDev/paris-events.git`
+
+2. Installer les packages NPM
+**Si vous n'avez pas yarn :** 
+`npm install -g yarn`
+
+	 `yarn install` 
+3. Lancement en mode développement
+	`yarn start`
+ 
+
+## Fonctionnalités
+
+  
+
+### Carte des évènements
+
+La carte des évènements affiche une "pop-up" qui permet de voir tous les évènements disponibles à Paris et en couronnes sous forme de marqueurs qui en cliquant dessus affichent les informations de l'évènement.
+
+### Filtres
+
+Les filtres permettent de filtrer les résultats de recherche en fonction des critères disponibles.
+
+Vous pourrez par exemple choisir une catégorie et une sous-catégorie, une date, un lieu, etc...
+
+Vous pourrez aussi filtrer en tapant une recherche directement dans la barre de recherche.
+
+  
+
+### Pagination
+
+Le nombre de résultats par page est limité à 10 dans un soucis d'optimisation.
+
+Le site ira donc chercher les informations de 10 évènements maximum pour les afficher.
+
+  
+
+Les "barres" de pagination vous permettent d'afficher la page suivante ou d'aller au début ou à la fin des résultats disponibles.
+
+  
+
+### Résultats
+
+Les résultats sont affichés sous forme de "carte" (card) avec quelques informations. Vous disposerez d'un bouton en savoir plus pour obtenir toutes les informations de l'évènement.
+
+  
+
+### Détails de l'évènement
+
+Affiche une "pop-up" qui donne plus de détails concernant l'évènement sélectionné. Ce n'est pas une nouvelle page, vous pourrez fermer la "pop-up" et retourner à l'affichage de tous les résultats disponibles.
+
+
+
 ## Scripts disponibles
 
-
+  
 
 ### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Lance l'application en mode développement<br/>
+
+Ouvrez [http://localhost:3000](http://localhost:3000) pour voir votre application dans le navigateur.
+
+  
+
+La page rechargera à chaque fois que vous ferez des modifications.
+
+  
 
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  
+
+Lance le script de test en mode "Watch mode" <br  />
+
+Voir les actions à propos des [scripts de test](https://facebook.github.io/create-react-app/docs/running-tests).
+
+  
 
 ### `yarn build`
 
-Construits l'application dans le dossier `build`.<br />
+  
+
+Construits l'application dans le dossier `build`.<br  />
+
 Cela optimise et construit l'application en mode production pour la meilleure performance.
 
-TLe build inclut tous les fichiers et les bons chemins<br />
+  
+
+TLe build inclut tous les fichiers et les bons chemins<br  />
+
 L'application est prête à être déployée !!
+
+  
 
 Pour en savoir plus sur le [déploiement](https://facebook.github.io/create-react-app/docs/deployment).
 
+  
+
 ### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Note: cette opération n'est pas annulable. Une fois qu'on `eject`, on ne peut revenir en arrière**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Si vous n'êtes pas satisfait de la version de Build, vous pouvez exécuter la commande eject n'importe quand. Cette commande retirera le build de votre projet.
+
+  
+
+Cela copiera tous les projets de configuration à leur place initiale pour que vous ayez plein contrôle dessus.
+
+
+## Documentation
+
+La documentation généré grâce à jsdoc et better docs est accessible dans le dossier /docs/index.html.
+
+Vous pourrez voir tous les composants de l'application dans un site clair.
 
 ## En savoir plus
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Pour en savoir plus : [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-## Auteur 
+  
+
+Pour apprendre React : [React documentation](https://reactjs.org/)
+
+  
+
+## Auteur
+
+  
 
 Julien Dupont

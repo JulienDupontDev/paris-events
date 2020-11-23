@@ -49,7 +49,7 @@ reactComponents['ResultItemsList'] = Component7;
 import Component8 from '../src/components/pagination/index.js';
 reactComponents['ResultPagination'] = Component8;
 
-import Component9 from '../src/components/tableSearch/subComponents/search.js';
+import Component9 from '../src/components/tableSearch/subComponents/Search.js';
 reactComponents['SearchInput'] = Component9;
 
 import Component10 from '../src/components/tableSearch/subComponents/SimpleSelect.js';

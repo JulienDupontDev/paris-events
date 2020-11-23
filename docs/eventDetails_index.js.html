@@ -178,7 +178,6 @@ class EventDetails extends Component {
     super(props);
     this.state = {
       open: false,
-      imageLoading: true
     }
   }
 
@@ -196,7 +195,6 @@ class EventDetails extends Component {
 
   render() {
     const { item, classes } = this.props;
-    console.log(item)
 
     return (
       &lt;div>
@@ -224,9 +222,6 @@ class EventDetails extends Component {
                 &lt;CloseIcon />
               &lt;/IconButton>
               &lt;Typography variant='h6'>{item.fields.title}&lt;/Typography>
-              {/* &lt;Button autoFocus color="inherit" onClick={handleClose}>
-                save
-            &lt;/Button> */}
             &lt;/Toolbar>
           &lt;/AppBar>
           &lt;Grid className={classes.grid} container spacing={2} >
