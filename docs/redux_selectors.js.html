@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> SimpleSelect</title>
+  <title> redux/selectors.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,164 +79,43 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Components</p>
-                    <h1>SimpleSelect</h1>
+                    <p>Source</p>
+                    <h1>redux/selectors.js</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-            &ltSimpleSelect  /&gt
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="SimpleSelect">
-        <a class="href-link" href="#SimpleSelect">#</a>
-        
-        <span class="code-name">
-            
-                &ltSimpleSelect  /&gt
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Classe générique pour les select avec autocompletion</p>
-    </div>
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_tableSearch_subComponents_SimpleSelect.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_tableSearch_subComponents_SimpleSelect.js.html">components/tableSearch/subComponents/SimpleSelect.js</a>, <a href="components_tableSearch_subComponents_SimpleSelect.js.html#line14">line 14</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-        
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @method
+ * @description Permet de récupérer le state actuel des résultats de recherche
+ * @param {*} store 
+ */
+export const getResultItemsState = store => store.resultItems;
+/**
+ * @method
+ * @description Permet de renvoyer les résultats de recherche contenus dans le store
+ * @param {*} store 
+ */
+export const getResultItemsList = store => getResultItemsState(store) ? getResultItemsState(store) : [];
+/**
+ * @method
+ * @description Permet de récupérer l'état du  nombre de résultats totaux disponibles
+ * @param {*} store 
+ */
+export const getNhitsState = store => store.nHits;
+/**
+ * @method
+ * @description Permet de récupérer le nombre de résultats totaux disponibles avec l'api 
+ * @param {*} store 
+ */
+export const getNhits = store => getNhitsState(store) ? getNhitsState(store) : Number;
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> SimpleSelect</title>
+  <title> redux/reducers/resultsItems.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,164 +79,48 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Components</p>
-                    <h1>SimpleSelect</h1>
+                    <p>Source</p>
+                    <h1>redux/reducers/resultsItems.js</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-            &ltSimpleSelect  /&gt
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="SimpleSelect">
-        <a class="href-link" href="#SimpleSelect">#</a>
-        
-        <span class="code-name">
-            
-                &ltSimpleSelect  /&gt
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Classe générique pour les select avec autocompletion</p>
-    </div>
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_tableSearch_subComponents_SimpleSelect.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_tableSearch_subComponents_SimpleSelect.js.html">components/tableSearch/subComponents/SimpleSelect.js</a>, <a href="components_tableSearch_subComponents_SimpleSelect.js.html#line14">line 14</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-        
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { UPDATE_RESULT_ITEMS } from '../actionTypes';
+
+const initialState = {
+  resultItems: [],
+  query: ''
+}
+
+/**
+ * @method
+ * @description Mets à jour les résultats dans le store
+ * @param {*} state 
+ * @param {*} action 
+ */
+const resultItemsReducers = (state = initialState, action) => {
+  switch (action.type) {
+    case UPDATE_RESULT_ITEMS:
+      const { query, results } = action.payload.resultItems;
+
+      return {
+        query: query,
+        resultItems: [
+          ...results
+        ]
+      }
+    default:
+      return state;
+  }
+}
+
+export default resultItemsReducers;</code></pre>
+        </article>
+    </section>
 
 
 

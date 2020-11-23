@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> SimpleSelect</title>
+  <title> components/tableSearch/subComponents/Categories.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,164 +79,114 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Components</p>
-                    <h1>SimpleSelect</h1>
+                    <p>Source</p>
+                    <h1>components/tableSearch/subComponents/Categories.js</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-            &ltSimpleSelect  /&gt
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="SimpleSelect">
-        <a class="href-link" href="#SimpleSelect">#</a>
-        
-        <span class="code-name">
-            
-                &ltSimpleSelect  /&gt
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Classe générique pour les select avec autocompletion</p>
-    </div>
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_tableSearch_subComponents_SimpleSelect.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_tableSearch_subComponents_SimpleSelect.js.html">components/tableSearch/subComponents/SimpleSelect.js</a>, <a href="components_tableSearch_subComponents_SimpleSelect.js.html#line14">line 14</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-        
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Grid from '@material-ui/core/Grid';
+
+const icon = &lt;CheckBoxOutlineBlankIcon fontSize='small' />
+const checkedIcon = &lt;CheckBoxIcon fontSize='small' />
+
+/**
+ * @class Categories
+ * @component
+ * @description regroupe le filtre de catégories et de sous catégories 
+ */
+class Categories extends Component {
+
+  render() {
+    const { subCategories, categories } = this.props.parentState;
+
+    return (
+      &lt;Grid item xs={12} sm={8}>
+        &lt;Grid container spacing={2}>
+          &lt;Grid item xs={6} sm={6}>
+            &lt;Autocomplete
+              multiple
+              noOptionsText="Pas d'options"
+              id='categories'
+              key='1'
+              limitTags={2}
+              options={categories}
+              disableCloseOnSelect
+              onChange={this.props.handleUpdateCategories}
+              getOptionLabel={(option) => option.name}
+              renderOption={(option, { selected }) => (
+                &lt;React.Fragment>
+                  &lt;Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name}
+                &lt;/React.Fragment>
+              )}
+              renderInput={params => (
+                &lt;TextField
+                  {...params}
+                  variant='outlined'
+                  label='Catégories'
+                  placeholder='Catégorie'
+                />
+              )}
+            />
+          &lt;/Grid>
+          &lt;Grid item xs={6} sm={6}>
+            &lt;Autocomplete
+              multiple
+              noOptionsText="Pas d'options"
+              id='subCategories'
+              key='2'
+              limitTags={2}
+              options={subCategories}
+              groupBy={subCategory => subCategory.category}
+              disableCloseOnSelect
+              onChange={this.props.handleUpdateSubCategories}
+              getOptionLabel={subCategory => subCategory.name}
+              renderOption={(option, { selected }) => {
+                return (
+                  &lt;React.Fragment>
+                    &lt;Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                  &lt;/React.Fragment>
+                )
+              }}
+              renderInput={params => (
+                &lt;TextField
+                  {...params}
+                  variant='outlined'
+                  label='Sous-catégories'
+                  placeholder='Sous-catégorie'
+                />
+              )} />
+          &lt;/Grid>
+        &lt;/Grid>
+      &lt;/Grid>
+    );
+  }
+}
+export default Categories;</code></pre>
+        </article>
+    </section>
 
 
 

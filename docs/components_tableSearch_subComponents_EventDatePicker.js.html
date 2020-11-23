@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> SimpleSelect</title>
+  <title> components/tableSearch/subComponents/EventDatePicker.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,164 +79,74 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Components</p>
-                    <h1>SimpleSelect</h1>
+                    <p>Source</p>
+                    <h1>components/tableSearch/subComponents/EventDatePicker.js</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-            &ltSimpleSelect  /&gt
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="SimpleSelect">
-        <a class="href-link" href="#SimpleSelect">#</a>
-        
-        <span class="code-name">
-            
-                &ltSimpleSelect  /&gt
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Classe générique pour les select avec autocompletion</p>
-    </div>
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_tableSearch_subComponents_SimpleSelect.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_tableSearch_subComponents_SimpleSelect.js.html">components/tableSearch/subComponents/SimpleSelect.js</a>, <a href="components_tableSearch_subComponents_SimpleSelect.js.html#line14">line 14</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-        
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider
+} from '@material-ui/pickers';
+import { Grid } from '@material-ui/core';
+
+/**
+ * @class
+ * @component
+ * @description Sélecteur de date pour la recherche d'évènements
+ * 
+ */
+class EventDatePicker extends Component {
+  constructor(props) {
+    super(props);
+    this.initialDate = this.props.date.value;
+  }
+  render() {
+    const { date } = this.props;
+    return (
+      &lt;Grid item xs={10} sm={4}>
+        &lt;MuiPickersUtilsProvider utils={DateFnsUtils}>
+          &lt;KeyboardDatePicker
+            margin='normal'
+            id='date-picker-dialog'
+            label="Date de l'évènement"
+            format='dd/MM/yyyy'
+            lang='fr'
+            minDate={this.initialDate}
+            value={(new Date(date.value))}
+            onChange={this.checkDate}
+            KeyboardButtonProps={{
+              'aria-label': 'change date'
+            }}
+          />
+        &lt;/MuiPickersUtilsProvider>
+      &lt;/Grid>
+    );
+  }
+
+  /**
+   * @method
+   * @description Vérifies si la date envoyée par le picker est une date valide et exécute la fonction pour mettre à jour la date dans les paramètres de recherche 
+   * @param {date} date 
+   */
+  checkDate = (date) => {
+    if (Object.prototype.toString.call(date) === "[object Date]") {
+      if (!isNaN(date.getTime())) {
+        this.props.update(date);
+      }
+    }
+  }
+}
+export default EventDatePicker;</code></pre>
+        </article>
+    </section>
 
 
 

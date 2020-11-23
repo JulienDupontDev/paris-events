@@ -5,6 +5,12 @@ const initialState = {
   query: ''
 }
 
+/**
+ * @method
+ * @description Mets à jour les résultats dans le store
+ * @param {*} state 
+ * @param {*} action 
+ */
 const resultItemsReducers = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_RESULT_ITEMS:

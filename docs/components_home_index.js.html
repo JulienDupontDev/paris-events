@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> SimpleSelect</title>
+  <title> components/home/index.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -77,164 +79,54 @@
         <div class="core" id="main-content-wrapper">
             <div class="content">
                 <header class="page-title">
-                    <p>Components</p>
-                    <h1>SimpleSelect</h1>
+                    <p>Source</p>
+                    <h1>components/home/index.js</h1>
                 </header>
                 
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-            &ltSimpleSelect  /&gt
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        
-
-
-    
-    <h4 class="name" id="SimpleSelect">
-        <a class="href-link" href="#SimpleSelect">#</a>
-        
-        <span class="code-name">
-            
-                &ltSimpleSelect  /&gt
-            
-        </span>
-    </h4>
-    
-
-    
-    
-    <div class="description">
-        <p>Classe générique pour les select avec autocompletion</p>
-    </div>
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="components_tableSearch_subComponents_SimpleSelect.js.html" class="button">View Source</a>
-            <span>
-                <a href="components_tableSearch_subComponents_SimpleSelect.js.html">components/tableSearch/subComponents/SimpleSelect.js</a>, <a href="components_tableSearch_subComponents_SimpleSelect.js.html#line14">line 14</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-        
-    
-    </div>
-    
-        
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Grid from '@material-ui/core/Grid';
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Sorting from '../tableSearch';
+import ResultPagination from '../pagination';
+import EventsMap from '../eventsMap';
+const useStyle = theme => ({
+  root: {
+    marginTop: "5em",
+    overflowX: 'hidden',
+  },
+
+});
+
+/**
+ * @class Home
+ * @component
+ * @description Page comprenant tous les composants utiles à l'application
+ */
+class Home extends Component {
+
+  render() {
+    const { classes } = this.props;
+
+    return (
+      &lt;Grid className={classes.root}>
+        &lt;EventsMap />
+        &lt;Sorting />
+        &lt;Grid item sm={12}>
+          &lt;ResultPagination />
+        &lt;/Grid>
+      &lt;/Grid>
+    );
+  };
+}
+export default withStyles(useStyle)(Home);</code></pre>
+        </article>
+    </section>
 
 
 
