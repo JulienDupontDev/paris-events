@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> tableSearch/index.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Paris évènements</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>tableSearch/index.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import { connect } from 'react-redux';
+import { updateResultItems, updateNHits } from '../../redux/actions';
+import axios from 'axios';
+import CustomSwitch from './subComponents/Switch';
+import SimpleSelect from './subComponents/SimpleSelect';
+import SearchInput from './subComponents/Search';
+import facetsQuery from './facets.json';
+import EventDatePicker from './subComponents/EventDatePicker';
+import Categories from './subComponents/Categories';
+
+const useStyles = (theme) => ({
+  root: {
+    padding: '40px',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+});
+
+/**
+ * @class Sorting
+ * @component
+ * @description permet de modifier les critères de recherche pour l'utilisateur et d'aller chercher les évènements correspondants 
+ */
+class Sorting extends Component {
+  constructor(props) {
+    super(props)
+    this.baseUrl =
+      'https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/api'
+    this.state = {
+      postCodes: [],
+      cities: [],
+      places: [],
+      categories: [],
+      price_types: [],
+      access_types: [],
+      tags: [],
+      subCategories: [],
+      userFilters: {
+        pmr: { value: 0 },
+        blind: { value: 0 },
+        deaf: { value: 0 },
+        categories: [],
+        addresses_zipcodes: [],
+        addresses_names: [],
+        addresses_cities: [],
+        subCategories: [],
+        selectedDate: { value: new Date().toISOString() }
+      }
+    }
+    this.updateSwitchValue = this.updateSwitchValue.bind(this);
+    this.updateSelectValue = this.updateSelectValue.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleUpdateCategories = this.handleUpdateCategories.bind(this);
+    this.handleUpdateSubCategories = this.handleUpdateSubCategories.bind(this);
+  }
+
+  /**
+   * @method
+   */
+  componentDidUpdate() {
+    this.handleUpdateResultItems();
+  }
+
+  /**
+   * @method
+   * @description Va charger tous les critères disponibles et les ajouter dans le state du composant
+   */
+  componentDidMount() {
+    axios
+      .get(
+        facetsQuery.query
+      )
+      .then(response => {
+        const facets = response.data.facet_groups
+        this.setState({
+          categories: facets.filter(facet => facet.name === 'category')[0]
+            .facets,
+          access_types: facets.filter(facet => facet.name === 'access_type')[0].facets,
+          price_types: facets.filter(facet => facet.name === 'price_type')[0].facets,
+          postCodes: facets.filter(facet => facet.name === 'address_zipcode')[0]
+            .facets,
+          tags: facets.filter(facet => facet.name === 'tags')[0].facets,
+          cities: facets.filter(facet => facet.name === 'address_city')[0]
+            .facets,
+          places: facets.filter(facet => facet.name === 'address_name')[0]
+            .facets
+        });
+      });
+  }
+
+  render() {
+    const { classes } = this.props;
+    const { userFilters } = this.state
+
+    return (
+      &lt;Grid item>
+        &lt;Grid container spacing={2} className={classes.root}>
+          &lt;SearchInput update={this.handleSearch} />
+          &lt;Categories handleUpdateCategories={this.handleUpdateCategories} handleUpdateSubCategories={this.handleUpdateSubCategories} parentState={this.state} />
+          &lt;SimpleSelect
+            key='tags'
+            infos={{ name: 'tags', label: 'Mots-clés', values: this.state.tags }}
+            update={this.updateSelectValue}
+          />
+          &lt;SimpleSelect
+            key='address_name'
+            infos={{
+              name: 'address_name',
+              label: 'Nom du lieu',
+              values: this.state.places
+            }}
+            update={this.updateSelectValue}
+          />
+          &lt;SimpleSelect
+            key='address_zipcode'
+            infos={{
+              name: 'address_zipcode',
+              label: 'Code postal',
+              values: this.state.postCodes
+            }}
+            update={this.updateSelectValue}
+          />
+          &lt;SimpleSelect
+            key='address_city'
+            infos={{
+              name: 'address_city',
+              label: 'Ville',
+              values: this.state.cities
+            }}
+            update={this.updateSelectValue}
+          />
+          &lt;CustomSwitch
+            key='pmr'
+            update={this.updateSwitchValue}
+            infos={{
+              name: 'pmr',
+              title: 'Mobilité réduite',
+              value: userFilters.pmr.value
+            }}
+          />
+          &lt;CustomSwitch
+            key='blind'
+            update={this.updateSwitchValue}
+            infos={{
+              name: 'blind',
+              title: 'Accès mal voyant',
+              value: userFilters.blind.value
+            }}
+          />
+          &lt;CustomSwitch
+            key='deaf'
+            update={this.updateSwitchValue}
+            infos={{
+              name: 'deaf',
+              title: 'Accès mal entendant',
+              value: userFilters.deaf.value
+            }}
+          />
+          &lt;SimpleSelect
+            key='price_type'
+            infos={{
+              name: 'price_type',
+              label: 'Type de prix',
+              values: this.state.price_types
+            }}
+            update={this.updateSelectValue}
+          />
+          &lt;SimpleSelect
+            key='access_type'
+            infos={{
+              name: 'access_type',
+              label: 'Type d\'accès',
+              values: this.state.access_types
+            }}
+            update={this.updateSelectValue}
+          />
+
+          &lt;EventDatePicker update={this.handleDateUpdate} date={this.state.userFilters.selectedDate} />
+        &lt;/Grid>
+      &lt;/Grid>
+    )
+  }
+
+  /**
+   * Vérifies que le tableau envoyé n'est pas nul
+   * @method
+   * @param {object[]} values 
+   * @param {string} objectName 
+   * @returns {boolean} 
+   */
+  isArrayEmpty = (values, objectName) => {
+    if (values.length === 0) {
+      this.setState({
+        userFilters: { ...this.state.userFilters, [objectName]: [] }
+      });
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @method
+   * @description Permet de mettre à jour l'état des filtres de recherche de type "select" (sauf Catégorie et Sous-catégories)
+   * @param {*} object 
+   * @param {*} values 
+   */
+  updateSelectValue = (object, values) => {
+    if (values.length === 0) {
+      this.setState({
+        userFilters: { ...this.state.userFilters, [object]: [] }
+      });
+      return;
+    }
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        [object]: {
+          filters: [...values],
+          facet: object
+        }
+      }
+    });
+  }
+
+  /**
+   * @method
+   * @description Permet de mettre à jour la date de l'évènement
+   * @param {*} newDate 
+   */
+  handleDateUpdate = (newDate) => {
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        selectedDate: { value: new Date(newDate).toISOString(), facet: 'date_start' },
+      }
+    });
+  }
+
+  /**
+   * @method
+   * @description Modifie la valeur des champs de type Switch 
+   * @param {*} object 
+   * @param {*} value 
+   */
+  updateSwitchValue = (object, value) => {
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        [object]: { value: value, facet: object }
+      }
+    });
+  }
+
+  /**
+   * @method
+   * @description Génère la requête avec les filtres définis par l'utilisateur
+   * @returns {string} : query 
+   */
+  preparyQuery = () => {
+    let query = '';
+    Object.values(this.state.userFilters).forEach(value => {
+      if (value.filters &amp;&amp; value.filters.length !== 0) {
+        query += `&amp;facet=${value.facet}`;
+        value.filters.map(
+          filter =>
+            (query += `&amp;refine.${value.facet}=${encodeURIComponent(
+              filter.path
+            ).replaceAll(' ', '+')}`)
+        );
+      } else {
+        value.facet !== 'q'
+          ? (query +=
+            value.facet !== undefined
+              ? `&amp;facet=${value.facet}&amp;refine.${value.facet}=${value.value}`
+              : '')
+          : (query += `&amp;q=${value.value}`);
+      }
+    });
+    query = query !== '' ? query : '';
+    return `${query}&amp;rows=10&amp;start=0`;
+  }
+
+  /**
+   * @method
+   * @description Sauvegardes la recherche de l'utilisateur dans le state 
+   * @param {string} query 
+   */
+  handleSearch = (query) => {
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        userQuery: { value: query, facet: 'q' }
+      }
+    });
+  }
+
+  /**
+   * @method
+   * @description Mets à jour les résultats contenus dans le store avec ceux obtenus via l'api
+   */
+  handleUpdateResultItems = async () => {
+    const query = this.preparyQuery()
+    await axios
+      .get(
+        `https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-${query}`
+      )
+      .then(response => {
+        this.props.updateResultItems({
+          results: response.data.records,
+          query: query
+        });
+        this.props.updateNHits(response.data.nhits);
+      });
+  }
+
+  /**
+   * @method
+   * @description Mets à jour les catégories dans les résultats de recherche 
+   * et mets à jour les sous -catégories disponibles 
+   * @param {*} event 
+   * @param {object[]} categories 
+   */
+  handleUpdateCategories = (event, categories) => {
+    if (categories.length === 0) {
+      this.setState({
+        subCategories: [],
+        userFilters: { ...this.state.userFilters, categories: [] }
+      })
+      return;
+    }
+    let tempArray = [];
+    categories.forEach(category => {
+      let subTempArray = category.facets.filter(
+        subCategory =>
+          !this.state.subCategories.includes(subCategory.name)
+      );
+      subTempArray.forEach(
+        subCategory => (subCategory.category = category.name)
+      );
+      tempArray = tempArray.concat(subTempArray)
+    });
+
+    this.setState({
+      subCategories: tempArray,
+      savedCategories: { filters: [...categories], facet: 'category' },
+      userFilters: {
+        ...this.state.userFilters,
+        categories: { filters: [...categories], facet: 'category' }
+      }
+    });
+  }
+
+  /**
+   * @method
+   * @description Permet de mettre à jour les sous-catégories choisies
+   * Si aucune alors on remet les catégories choisies seulement
+   * dans les filtres de recherche
+   * @param {*} event 
+   * @param {object[]} subCategories 
+   */
+  handleUpdateSubCategories = (event, subCategories) => {
+    if (this.isArrayEmpty(subCategories, 'categories')) {
+      this.setState({ ...this.state, userFilters: { ...this.state.userFilters, categories: this.state.savedCategories } })
+      return;
+    }
+    this.setState({
+      userFilters: {
+        ...this.state.userFilters,
+        categories: { filters: [...subCategories], facet: 'category' }
+      }
+    });
+  }
+}
+
+export default connect(null, { updateResultItems, updateNHits })(
+  withStyles(useStyles)(Sorting)
+);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

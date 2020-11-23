@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> resultItemsList/index.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Paris évènements</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>resultItemsList/index.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+  withStyles
+} from '@material-ui/core'
+import React, { Component } from 'react'
+import Iframe from 'react-iframe'
+import { connect } from 'react-redux'
+import { getResultItemsList } from '../../redux/selectors'
+import EventDetails from '../eventDetails'
+/**
+ * Recupères les résultats dans le store redux
+ * @param {*} state
+ */
+const mapStateToProps = state => {
+  const resultItems = getResultItemsList(state)
+  return resultItems;
+}
+const useStyles = theme => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  coverImage: {
+    objectFit: 'cover',
+    width: '100%'
+  },
+  itemsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '1em',
+    marginBottom: '1em'
+  },
+  itemDescription: {
+    overflow: 'hidden'
+  }
+})
+
+/**
+ * Permet de reformatter la description car les données ne se tranforment pas directement en HTML toutes seules
+ * On limite aussi le nombre de caractères affichés pour uniformiser l'affichage des cartes
+ * @param {*} string
+ */
+const toHtml = string => {
+  let parser = new DOMParser()
+  let doc = parser.parseFromString(string, 'text/html')
+  let content = doc.body.innerText
+
+  return content.length &lt; 300
+    ? content
+    : content.substring(0, 300).concat('.....')
+}
+
+/**
+ * @class ResultItemsList
+ * @component
+ * @description Composant qui affiche les résultats de recherche sous forme de carte
+ */
+class ResultItemsList extends Component {
+  render() {
+    const { classes, resultItems } = this.props
+
+    return (
+      &lt;Grid container item spacing={2} className={classes.itemsContainer}>
+        {resultItems.length === 0
+          ? 'Pas de résultats'
+          : resultItems.map(item => {
+            return (
+              &lt;Grid item xs={10} sm={5} key={item.fields.id}>
+                &lt;Card>
+                  &lt;CardActionArea>
+                    &lt;CardMedia
+                      component='img'
+                      alt={item.fields.cover_alt}
+                      height='250'
+                      image={item.fields.cover_url}
+                      title='Contemplative Reptile'
+                      className={classes.coverImage}
+                    />
+                    &lt;CardContent>
+                      &lt;Typography gutterBottom variant='h5' component='h2'>
+                        {item.fields.title.toUpperCase()}
+                      &lt;/Typography>
+                      &lt;Typography
+                        variant='body2'
+                        color='textSecondary'
+                        component='p'
+                        className={classes.itemDescription}
+                      >
+                        {toHtml(item.fields.description)}
+                      &lt;/Typography>
+                      &lt;Iframe
+                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
+    &amp;q=${item.fields.address_street} ${item.fields.address_city}&amp;zoom=18`}
+                        frameBorder={0}
+                        style={{
+                          border: 0,
+                          minWidth: '100%',
+                          height: '100px'
+                        }}
+                        ariaHidden={false}
+                        allowFullScreen=''
+                      />
+                      &lt;Typography>
+                        {item.fields.price_type}
+                        {item.fields.price_detail
+                          ? ' - ' + item.fields.price_detail
+                          : ''}
+                      &lt;/Typography>
+                    &lt;/CardContent>
+                  &lt;/CardActionArea>
+                  &lt;CardActions>
+                    &lt;EventDetails item={item} />
+                  &lt;/CardActions>
+                &lt;/Card>
+              &lt;/Grid>
+            )
+          })}
+      &lt;/Grid>
+    )
+  }
+}
+
+export default connect(mapStateToProps)(withStyles(useStyles)(ResultItemsList))
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

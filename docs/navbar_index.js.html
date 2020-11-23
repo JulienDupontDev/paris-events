@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> navbar/index.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Paris évènements</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>navbar/index.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import PropTypes from 'prop-types'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import { makeStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import useScrollTrigger from '@material-ui/core/useScrollTrigger'
+import Fab from '@material-ui/core/Fab'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import Zoom from '@material-ui/core/Zoom'
+import { Link } from '@material-ui/core'
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'fixed',
+    display: 'flex',
+    justifyContent: 'center',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2)
+  }
+}))
+
+/**
+ * @method
+ * @description Permet d'afficher une fleche pour retourner en haut de la page
+ * @param {*} props
+ */
+function ScrollTop(props) {
+  const { children, window } = props
+  const classes = useStyles()
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+    disableHysteresis: true,
+    threshold: 100
+  })
+
+  /**
+   * Gere le click sur le bouton haut de page
+   * @method
+   * @param {*} event 
+   */
+  const handleClick = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelector(
+      '#back-to-top-anchor'
+    )
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
+
+  return (
+    &lt;Zoom in={trigger}>
+      &lt;div onClick={handleClick} role='presentation' className={classes.root}>
+        {children}
+      &lt;/div>
+    &lt;/Zoom>
+  )
+}
+
+ScrollTop.propTypes = {
+  children: PropTypes.element.isRequired,
+  window: PropTypes.func
+}
+/**
+ * @class Navbar
+ * @component
+ * @param {*} props 
+ */
+export default function Navbar(props) {
+  return (
+    &lt;React.Fragment>
+      &lt;CssBaseline />
+      &lt;AppBar>
+        &lt;Toolbar>
+          &lt;Link
+            underline='none'
+            href='/'
+            style={{ color: 'white', fontSize: '15pt' }}
+            rel='noreferrer'
+            variant='h1'
+          >
+            Paris évènements
+          &lt;/Link>
+        &lt;/Toolbar>
+      &lt;/AppBar>
+      &lt;Toolbar id='back-to-top-anchor' />
+      &lt;ScrollTop {...props}>
+        &lt;Fab
+          color='primary'
+          size='small'
+          aria-label='scroll back to top'
+          style={{ zIndex: '999' }}
+        >
+          &lt;KeyboardArrowUpIcon />
+        &lt;/Fab>
+      &lt;/ScrollTop>
+    &lt;/React.Fragment>
+  )
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

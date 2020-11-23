@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> eventsMap/index.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Paris évènements</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>eventsMap/index.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import axios from 'axios';
+import { CircularProgress, IconButton, Link, Typography, withStyles } from '@material-ui/core';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import 'leaflet/dist/leaflet.css';
+import Leaflet from 'leaflet';
+import { Button, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import { Close } from '@material-ui/icons';
+
+Leaflet.Icon.Default.imagePath = '../node_modules/leaflet';
+
+delete Leaflet.Icon.Default.prototype._getIconUrl;
+
+Leaflet.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+})
+
+const useStyles = () => ({
+  mapContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    overflow: 'none',
+    height: '400px',
+  },
+  sectionTitle: {
+    fontWeight: 'bold',
+  },
+  listItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: '8pt',
+    wordWrap: 'anywhere',
+  },
+});
+
+const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+/**
+ * @class
+ * @component
+ * @description Carte contenu dans un dialogue qui affiche les évènements disponibles à Paris
+ */
+class EventsMap extends Component {
+  /**
+   *  @constructor
+   * @description constructeur qui déclare le state du composant
+   * On définit le centre de la carte aux coordonnées du centre de Paris
+   * @param {*} props 
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      events: [],
+      center: [48.8566, 2.3522],
+      loading: true,
+      eventsIframeOpened: false,
+    }
+    this.handleDialogShow = this.handleDialogShow.bind(this);
+    this.getEvents();
+  }
+
+  /**
+   * @method
+   * @description Permet d'afficher ou de fermer le modal
+   */
+  handleDialogShow = () => this.setState({ eventsIframeOpened: !this.state.eventsIframeOpened });
+
+  render = () => {
+    const { events, center } = this.state;
+    const { classes } = this.props;
+    return (
+      &lt;Grid item xs={12} sm={12}>
+        &lt;Typography>Bienvenue ! Recherchez des évènements à Paris ci-dessous.&lt;/Typography>
+        &lt;Button variant="outlined" color="primary" onClick={this.handleDialogShow}>
+          Voir la carte interactive des évènements
+      &lt;/Button>
+        &lt;Dialog
+          maxWidth='md'
+          fullWidth={true}
+          open={this.state.eventsIframeOpened}
+          onClose={this.handleDialogShow}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          &lt;DialogTitle id="alert-dialog-title">{this.state.loading ? (
+            &lt;Typography>
+              Chargement des données
+            &lt;/Typography>
+          ) : "Evènements à Paris"}
+            &lt;IconButton style={{ position: 'absolute', right: '0', top: '0' }} onClick={this.handleDialogShow}>
+              &lt;Close />
+            &lt;/IconButton>
+          &lt;/DialogTitle>
+          &lt;DialogContent className={this.state.loading ? classes.mapContainer : ''} >
+            {!this.state.loading ? &lt;MapContainer
+              center={center}
+              zoom={11}
+              scrollWheelZoom
+              style={{ height: '400px', width: 'inherit' }}
+            >
+              &lt;TileLayer
+                attribution='&amp;copy; &lt;a href="http://osm.org/copyright">OpenStreetMap&lt;/a> contributors'
+                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+              />
+              {events.map((event) => {
+                return &lt;Marker
+                  position={[event.geometry.coordinates[1], event.geometry.coordinates[0]]}
+                  key={event.fields.id}
+                >
+                  &lt;Popup>
+                    &lt;List style={{
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      maxWidth: '200px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      fontSize: '8pt',
+                    }}>
+                      &lt;ListItem>
+                        &lt;Typography style={{ fontWeight: 'bold' }}>
+                          {event.fields.title}
+                        &lt;/Typography>
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Chapeau&lt;/Typography>
+                        {event.fields.lead_text}
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>URL&lt;/Typography>
+                        &lt;Link href={event.fields.url} target='_blank' rel='noreferrer'>{event.fields.url}&lt;/Link>
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Catégorie&lt;/Typography>
+                        {event.fields.category}
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Date de début&lt;/Typography>
+                        {new Date(event.fields.date_start).toLocaleDateString('fr-FR', dateOptions)}
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Date de fin&lt;/Typography>
+                        {new Date(event.fields.date_end).toLocaleDateString('fr-FR', dateOptions)}
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Image de couverture&lt;/Typography>
+                        &lt;img src={event.fields.cover_url} style={{ width: '100%' }} alt={event.fields.cover.filename} />
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>
+                          Adresse
+                        &lt;/Typography>
+                        &lt;Link href={'https://google.com/maps/search/' + event.fields.address_street + ' ' + event.fields.address_city + ' ' + event.fields.address_zipcode}
+                          target='_blank' rel='noreferrer'>
+                          {event.fields.address_street},
+                  {event.fields.address_zipcode},
+                  {event.fields.address_city}
+                        &lt;/Link>
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Accès PMR&lt;/Typography>
+                        {event.fields.pmr}
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Accès mal entendant&lt;/Typography>
+                        {event.fields.deaf}
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Accès mal voyant&lt;/Typography>
+                        {event.fields.blind}
+                      &lt;/ListItem>
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Type de prix&lt;/Typography>
+                        {event.fields.price_type}
+                      &lt;/ListItem>
+                      {event.fields.price_detail ?
+                        &lt;ListItem className={classes.listItem}>
+                          &lt;Typography className={classes.sectionTitle}>Détail du prix&lt;/Typography>
+                          {event.fields.price_detail}
+                        &lt;/ListItem>
+                        : ''
+                      }
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Nom de contact&lt;/Typography>
+                        {event.fields.contact_name}
+                      &lt;/ListItem>
+                      {event.fields.contact_phone ?
+                        &lt;ListItem className={classes.listItem}>
+                          &lt;Typography className={classes.sectionTitle}>Téléphone de contact&lt;/Typography>
+                          {event.fields.contact_phone}
+                        &lt;/ListItem>
+                        : ''
+                      }
+                      {event.fields.contact_mail ?
+                        &lt;ListItem className={classes.listItem}>
+                          &lt;Typography className={classes.sectionTitle}>Email de contact&lt;/Typography>
+                          {event.fields.contact_mail}
+                        &lt;/ListItem>
+                        : ''
+                      }
+                      {event.fields.contact_facebook ?
+                        &lt;ListItem className={classes.listItem}>
+                          &lt;Typography className={classes.sectionTitle}>Contact Facebook&lt;/Typography>
+                          &lt;Link href={event.fields.contact_facebook} target='_blank' rel='noreferrer'>
+                            Cliquez pour voir la page
+                          &lt;/Link>
+                        &lt;/ListItem>
+                        : ''
+                      }
+                      &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Type d'accès&lt;/Typography>
+                        {event.fields.access_type}
+                      &lt;/ListItem>
+                      {event.fields.access_link ? &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Url de réservation&lt;/Typography>
+                        &lt;Link href={event.fields.access_link} target='_blank' rel='noreferrer'>
+                          Cliquez ici pour réserver
+                        &lt;/Link>
+                      &lt;/ListItem> : ''
+                      }
+                      {event.fields.updated_at ? &lt;ListItem className={classes.listItem}>
+                        &lt;Typography className={classes.sectionTitle}>Dernière mise à jour&lt;/Typography>
+                        {(new Date(event.fields.updated_at)).toLocaleDateString('fr-FR', dateOptions)}
+                      &lt;/ListItem> : ''
+                      }
+                    &lt;/List>
+                  &lt;/Popup>
+                &lt;/Marker>
+              })
+              }
+            &lt;/MapContainer>
+              : &lt;CircularProgress size={40} />
+            }
+          &lt;/DialogContent>
+        &lt;/Dialog>
+      &lt;/Grid>
+    );
+  }
+
+  /**
+   * @method
+   * @description Permet d'aller récupérer d'une part le nombre d'évènements disponibles puis de récupérer tous les évènements grâce au nombre reçu qui sera passé à row=$nombre dans la requête
+   */
+  getEvents = async () => {
+    const baseQuery = 'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-&amp;q=&amp;facet=category&amp;facet=tags&amp;facet=address_name&amp;facet=address_zipcode&amp;facet=address_city&amp;facet=pmr&amp;facet=blind&amp;facet=deaf&amp;facet=access_type&amp;facet=price_type&amp;';
+
+    await axios.get(baseQuery)
+      .then(async (response) => {
+        await axios.get(baseQuery.concat('rows=' + response.data.nhits))
+          .then((lastResponse) => {
+            const { records } = lastResponse.data;
+            this.setState({ events: records.filter((record) => record.geometry) });
+            this.setState({ loading: false });
+          })
+          .catch(() => console.log('erreur'))
+      })
+      .catch((error) => console.log(error));
+  }
+}
+
+export default withStyles(useStyles)(EventsMap);</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>
