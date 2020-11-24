@@ -71,4 +71,6 @@ class SearchInput extends Component {
     );
   }
 }
+
 export default withStyles(useStyles)(SearchInput);
+
