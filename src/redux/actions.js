@@ -9,5 +9,5 @@ export const updateResultItems = resultItems => ({
 
 export const updateNHits = nHits => ({
   type: UPDATE_NHITS,
-  payload: { nHits }
+  payload: { nHits },
 });

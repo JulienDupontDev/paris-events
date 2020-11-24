@@ -16,9 +16,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     bottom: theme.spacing(2),
-    right: theme.spacing(2)
-  }
-}))
+    right: theme.spacing(2),
+  },
+}));
 
 /**
  * @method
@@ -31,8 +31,8 @@ function ScrollTop(props) {
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
     disableHysteresis: true,
-    threshold: 100
-  })
+    threshold: 100,
+  });
 
   /**
    * Gere le click sur le bouton haut de page
@@ -42,10 +42,9 @@ function ScrollTop(props) {
   const handleClick = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(
       '#back-to-top-anchor'
-    )
-
+    );
     if (anchor) {
-      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
@@ -55,12 +54,12 @@ function ScrollTop(props) {
         {children}
       </div>
     </Zoom>
-  )
+  );
 }
 
 ScrollTop.propTypes = {
   children: PropTypes.element.isRequired,
-  window: PropTypes.func
+  window: PropTypes.func,
 }
 /**
  * @class Navbar
@@ -96,5 +95,5 @@ export default function Navbar(props) {
         </Fab>
       </ScrollTop>
     </React.Fragment>
-  )
+  );
 }

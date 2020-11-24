@@ -86,14 +86,14 @@ class Sorting extends Component {
           cities: facets.filter(facet => facet.name === 'address_city')[0]
             .facets,
           places: facets.filter(facet => facet.name === 'address_name')[0]
-            .facets
+            .facets,
         });
       });
   }
 
   render() {
     const { classes } = this.props;
-    const { userFilters } = this.state
+    const { userFilters } = this.state;
 
     return (
       <Grid item>
@@ -219,8 +219,8 @@ class Sorting extends Component {
         ...this.state.userFilters,
         [object]: {
           filters: [...values],
-          facet: object
-        }
+          facet: object,
+        },
       }
     });
   }
@@ -235,7 +235,7 @@ class Sorting extends Component {
       userFilters: {
         ...this.state.userFilters,
         selectedDate: { value: new Date(newDate).toISOString(), facet: 'date_start' },
-      }
+      },
     });
   }
 
@@ -250,7 +250,7 @@ class Sorting extends Component {
       userFilters: {
         ...this.state.userFilters,
         [object]: { value: value, facet: object }
-      }
+      },
     });
   }
 
@@ -292,8 +292,8 @@ class Sorting extends Component {
     this.setState({
       userFilters: {
         ...this.state.userFilters,
-        userQuery: { value: query, facet: 'q' }
-      }
+        userQuery: { value: query, facet: 'q' },
+      },
     });
   }
 
@@ -310,7 +310,7 @@ class Sorting extends Component {
       .then(response => {
         this.props.updateResultItems({
           results: response.data.records,
-          query: query
+          query: query,
         });
         this.props.updateNHits(response.data.nhits);
       });
@@ -327,8 +327,8 @@ class Sorting extends Component {
     if (categories.length === 0) {
       this.setState({
         subCategories: [],
-        userFilters: { ...this.state.userFilters, categories: [] }
-      })
+        userFilters: { ...this.state.userFilters, categories: [] },
+      });
       return;
     }
     let tempArray = [];
@@ -375,6 +375,4 @@ class Sorting extends Component {
   }
 }
 
-export default connect(null, { updateResultItems, updateNHits })(
-  withStyles(useStyles)(Sorting)
-);
+export default connect(null, { updateResultItems, updateNHits })(withStyles(useStyles)(Sorting));

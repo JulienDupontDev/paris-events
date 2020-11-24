@@ -25,7 +25,8 @@ Leaflet.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-})
+});
+
 const useStyles = theme => ({
   appBar: {
     position: 'relative'
@@ -60,7 +61,7 @@ const useStyles = theme => ({
     overflowY: 'auto',
     maxWidth: '200px',
   },
-})
+});
 
 /**
  * @method
@@ -120,7 +121,7 @@ class EventDetails extends Component {
           onClose={this.handleClose}
           TransitionComponent={Transition}
         >
-          <AppBar /*className={classes.appBar}*/>
+          <AppBar>
             <Toolbar>
               <IconButton
                 edge='start'
@@ -304,5 +305,4 @@ class EventDetails extends Component {
     )
   }
 }
-
 export default withStyles(useStyles)(EventDetails);

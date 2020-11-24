@@ -1,11 +1,11 @@
-import { Grid, withStyles } from '@material-ui/core'
-import { Pagination } from '@material-ui/lab'
-import React, { Component } from 'react'
-import axios from 'axios'
-import { connect } from 'react-redux'
-import { updateResultItems } from '../../redux/actions'
-import ResultItemsList from '../resultItemsList'
-import { getResultItemsList, getNhits } from '../../redux/selectors'
+import { Grid, withStyles } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { updateResultItems } from '../../redux/actions';
+import ResultItemsList from '../ResultItemsList';
+import { getResultItemsList, getNhits } from '../../redux/selectors';
 
 /**
  * @method
@@ -13,8 +13,8 @@ import { getResultItemsList, getNhits } from '../../redux/selectors'
  * @param {*} state
  */
 const mapStateToProps = state => {
-  const resultItems = getResultItemsList(state)
-  const nHits = getNhits(state)
+  const resultItems = getResultItemsList(state);
+  const nHits = getNhits(state);
   return { resultItems, nHits }
 }
 
@@ -26,7 +26,7 @@ const useStyles = theme => ({
   pagination: {
     display: 'flex',
     justifyContent: 'center'
-  }
+  },
 })
 
 /**
@@ -41,7 +41,7 @@ class ResultPagination extends Component {
     super(props)
     this.state = {
       totalHits: this.props.nHits.nHits,
-      itemPage: 1
+      itemPage: 1,
     }
   }
   /**
@@ -53,8 +53,8 @@ class ResultPagination extends Component {
       this.setState({
         ...this.state,
         totalHits: Math.floor(this.props.nHits.nHits / 10) + 1,
-        itemPage: 1
-      })
+        itemPage: 1,
+      });
     }
   }
   /**
@@ -75,19 +75,19 @@ class ResultPagination extends Component {
       .then(response => {
         this.props.updateResultItems({
           results: response.data.records,
-          query: this.props.resultItems.query
-        })
+          query: this.props.resultItems.query,
+        });
         this.setState({
-          itemPage: page
-        })
-      })
+          itemPage: page,
+        });
+      });
   }
 
   /**
    * @method
    */
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.pagination}>
@@ -120,6 +120,4 @@ class ResultPagination extends Component {
   }
 }
 
-export default connect(mapStateToProps, { updateResultItems })(
-  withStyles(useStyles)(ResultPagination)
-)
+export default connect(mapStateToProps, { updateResultItems })(withStyles(useStyles)(ResultPagination));
