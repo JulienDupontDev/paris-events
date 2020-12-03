@@ -24,7 +24,8 @@ class CustomSwitch extends Component {
               control={
                 <Switch
                   checked={value === 1}
-                  onChange={() => this.props.update(name, value === 1 ? 0 : 1)}
+                  color="primary"
+                  onChange={() => value === 1 ? this.props.update(name, null) : this.props.update(name, 1)}
                   name={name}
                 />
               }

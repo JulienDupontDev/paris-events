@@ -22,3 +22,17 @@ export const getNhitsState = store => store.nHits;
  * @param {*} store 
  */
 export const getNhits = store => getNhitsState(store) ? getNhitsState(store) : Number;
+
+/**
+ * @method
+ * @description Permet de récupérer l'état de la variable d'état du chargement des résultats
+ * @param {*} store 
+ */
+export const getLoadingState = store => store.loading;
+
+/**
+ * @method
+ * @description Permet de connaître l'état du chargement des résultats
+ * @param {*} store 
+ */
+export const getLoading = store => getLoadingState(store) ? getLoadingState(store) : Number;

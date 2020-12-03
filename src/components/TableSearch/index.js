@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
-import { updateResultItems, updateNHits } from '../../redux/actions';
+import { updateResultItems, updateNHits, updateLoading } from '../../redux/actions';
 import axios from 'axios';
 import CustomSwitch from './subComponents/Switch';
 import SimpleSelect from './subComponents/SimpleSelect';
@@ -249,7 +249,7 @@ class Sorting extends Component {
     this.setState({
       userFilters: {
         ...this.state.userFilters,
-        [object]: { value: value, facet: object }
+        [object]: value ? { value: value, facet: object } : { value: 0 },
       },
     });
   }
@@ -302,7 +302,8 @@ class Sorting extends Component {
    * @description Mets à jour les résultats contenus dans le store avec ceux obtenus via l'api
    */
   handleUpdateResultItems = async () => {
-    const query = this.preparyQuery()
+    const query = this.preparyQuery();
+    this.props.updateLoading(true);
     await axios
       .get(
         `https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-${query}`
@@ -313,6 +314,7 @@ class Sorting extends Component {
           query: query,
         });
         this.props.updateNHits(response.data.nhits);
+        this.props.updateLoading(false);
       });
   }
 
@@ -340,7 +342,7 @@ class Sorting extends Component {
       subTempArray.forEach(
         subCategory => (subCategory.category = category.name)
       );
-      tempArray = tempArray.concat(subTempArray)
+      tempArray = tempArray.concat(subTempArray);
     });
 
     this.setState({
@@ -375,4 +377,4 @@ class Sorting extends Component {
   }
 }
 
-export default connect(null, { updateResultItems, updateNHits })(withStyles(useStyles)(Sorting));
+export default connect(null, { updateResultItems, updateNHits, updateLoading })(withStyles(useStyles)(Sorting));

@@ -1,11 +1,11 @@
-import { Grid, withStyles } from '@material-ui/core';
+import { CircularProgress, Grid, withStyles } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { updateResultItems } from '../../redux/actions';
+import { updateResultItems, updateLoading } from '../../redux/actions';
 import ResultItemsList from '../ResultItemsList';
-import { getResultItemsList, getNhits } from '../../redux/selectors';
+import { getResultItemsList, getNhits, getLoading } from '../../redux/selectors';
 
 /**
  * @method
@@ -15,19 +15,20 @@ import { getResultItemsList, getNhits } from '../../redux/selectors';
 const mapStateToProps = state => {
   const resultItems = getResultItemsList(state);
   const nHits = getNhits(state);
-  return { resultItems, nHits }
+  const loading = getLoading(state);
+  return { resultItems, nHits, loading };
 }
 
-const useStyles = theme => ({
+const useStyles = () => ({
   root: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   pagination: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
-})
+});
 
 /**
  * @class ResultPagination
@@ -38,11 +39,11 @@ const useStyles = theme => ({
  */
 class ResultPagination extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       totalHits: this.props.nHits.nHits,
       itemPage: 1,
-    }
+    };
   }
   /**
    * @method
@@ -64,6 +65,7 @@ class ResultPagination extends Component {
    * @param {int} page
    */
   handleUpdateResultItems = async (event, page) => {
+    this.props.updateLoading(true);
     await axios
       .get(
         'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-' +
@@ -80,6 +82,7 @@ class ResultPagination extends Component {
         this.setState({
           itemPage: page,
         });
+        this.props.updateLoading(false);
       });
   }
 
@@ -88,10 +91,12 @@ class ResultPagination extends Component {
    */
   render() {
     const { classes } = this.props;
+    const paginationSize = window.innerWidth < 768 ? 'small' : 'large';
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12} className={classes.pagination}>
           <Pagination
+            size={paginationSize}
             showFirstButton
             showLastButton
             count={this.state.totalHits}
@@ -102,7 +107,7 @@ class ResultPagination extends Component {
           />
         </Grid>
         <Grid item>
-          <ResultItemsList />
+          {this.props.loading.loading ? <CircularProgress /> : <ResultItemsList />}
         </Grid>
         <Grid item xs={12} className={classes.pagination}>
           <Pagination
@@ -120,4 +125,4 @@ class ResultPagination extends Component {
   }
 }
 
-export default connect(mapStateToProps, { updateResultItems })(withStyles(useStyles)(ResultPagination));
+export default connect(mapStateToProps, { updateResultItems, updateLoading })(withStyles(useStyles)(ResultPagination));

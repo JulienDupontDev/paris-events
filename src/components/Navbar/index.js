@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     bottom: theme.spacing(2),
     right: theme.spacing(2),
+    zIndex: 1000,
   },
 }));
 
