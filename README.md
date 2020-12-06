@@ -7,10 +7,12 @@
 	- Technologies  
 - Mise en place
   - Prérequis 
-  - Installation
-- Utilisation 
+  - Installation 
 - Fonctionnalités
-
+- Scripts disponibles
+- Documentation
+- En savoir plus
+- Auteur 
 ## A propos du projet
   
 Le site web Paris évènements permet aux utilisateur de rechercher les évènements disponibles sur Paris et dans la région parisienne en fonction de filtres qu'ils peuvent choisir, mis à leur disposition.
