@@ -55,6 +55,7 @@ class Sorting extends Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleUpdateCategories = this.handleUpdateCategories.bind(this);
     this.handleUpdateSubCategories = this.handleUpdateSubCategories.bind(this);
+    this.handleDateUpdate = this.handleDateUpdate.bind(this);
   }
 
   /**
@@ -231,12 +232,22 @@ class Sorting extends Component {
    * @param {*} newDate 
    */
   handleDateUpdate = (newDate) => {
+    if (newDate !== null) {
+      this.setState({
+        userFilters: {
+          ...this.state.userFilters,
+          selectedDate: { value: new Date(newDate).toISOString(), facet: 'date_start' },
+        },
+      });
+      return;
+    }
     this.setState({
       userFilters: {
         ...this.state.userFilters,
-        selectedDate: { value: new Date(newDate).toISOString(), facet: 'date_start' },
+        selectedDate: { value: null },
       },
     });
+
   }
 
   /**
