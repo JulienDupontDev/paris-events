@@ -256,9 +256,9 @@ class EventsMap extends Component {
             this.setState({ events: records.filter((record) => record.geometry) });
             this.setState({ loading: false });
           })
-          .catch(() => console.log('erreur'))
+          .catch(() => alert('Une erreur est survenue lors de la récupération des résultats de recherche'))
       })
-      .catch((error) => console.log(error));
+      .catch((error) => alert('Une erreur est survenue lors de la récupération des résultats de recherche'));
   }
 }
 

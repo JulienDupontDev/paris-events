@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> components/pagination/index.js</title>
+  <title> components/Pagination/index.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getNhits">getNhits</a></li><li><a href="global.html#getNhitsState">getNhitsState</a></li><li><a href="global.html#getResultItemsList">getResultItemsList</a></li><li><a href="global.html#getResultItemsState">getResultItemsState</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#nHitsReducers">nHitsReducers</a></li><li><a href="global.html#resultItemsReducers">resultItemsReducers</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getLoading">getLoading</a></li><li><a href="global.html#getLoadingState">getLoadingState</a></li><li><a href="global.html#getNhits">getNhits</a></li><li><a href="global.html#getNhitsState">getNhitsState</a></li><li><a href="global.html#getResultItemsList">getResultItemsList</a></li><li><a href="global.html#getResultItemsState">getResultItemsState</a></li><li><a href="global.html#loadingReducer">loadingReducer</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#nHitsReducers">nHitsReducers</a></li><li><a href="global.html#resultItemsReducers">resultItemsReducers</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li><li><a href="global.html#updateLoading">updateLoading</a></li><li><a href="global.html#updateNHits">updateNHits</a></li><li><a href="global.html#updateResultItems">updateResultItems</a></li></ul></div>
                 
             </nav>
         </div>
@@ -80,7 +80,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>components/pagination/index.js</h1>
+                    <h1>components/Pagination/index.js</h1>
                 </header>
                 
 
@@ -89,14 +89,14 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Grid, withStyles } from '@material-ui/core'
-import { Pagination } from '@material-ui/lab'
-import React, { Component } from 'react'
-import axios from 'axios'
-import { connect } from 'react-redux'
-import { updateResultItems } from '../../redux/actions'
-import ResultItemsList from '../resultItemsList'
-import { getResultItemsList, getNhits } from '../../redux/selectors'
+            <pre class="prettyprint source linenums"><code>import { CircularProgress, Grid, withStyles } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { updateResultItems, updateLoading } from '../../redux/actions';
+import ResultItemsList from '../ResultItemsList';
+import { getResultItemsList, getNhits, getLoading } from '../../redux/selectors';
 
 /**
  * @method
@@ -104,21 +104,22 @@ import { getResultItemsList, getNhits } from '../../redux/selectors'
  * @param {*} state
  */
 const mapStateToProps = state => {
-  const resultItems = getResultItemsList(state)
-  const nHits = getNhits(state)
-  return { resultItems, nHits }
+  const resultItems = getResultItemsList(state);
+  const nHits = getNhits(state);
+  const loading = getLoading(state);
+  return { resultItems, nHits, loading };
 }
 
-const useStyles = theme => ({
+const useStyles = () => ({
   root: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   pagination: {
     display: 'flex',
-    justifyContent: 'center'
-  }
-})
+    justifyContent: 'center',
+  },
+});
 
 /**
  * @class ResultPagination
@@ -129,11 +130,11 @@ const useStyles = theme => ({
  */
 class ResultPagination extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       totalHits: this.props.nHits.nHits,
-      itemPage: 1
-    }
+      itemPage: 1,
+    };
   }
   /**
    * @method
@@ -144,8 +145,8 @@ class ResultPagination extends Component {
       this.setState({
         ...this.state,
         totalHits: Math.floor(this.props.nHits.nHits / 10) + 1,
-        itemPage: 1
-      })
+        itemPage: 1,
+      });
     }
   }
   /**
@@ -155,6 +156,7 @@ class ResultPagination extends Component {
    * @param {int} page
    */
   handleUpdateResultItems = async (event, page) => {
+    this.props.updateLoading(true);
     await axios
       .get(
         'https://opendata.paris.fr/api/records/1.0/search/?dataset=que-faire-a-paris-' +
@@ -164,26 +166,28 @@ class ResultPagination extends Component {
         )
       )
       .then(response => {
-        // console.log(response)
         this.props.updateResultItems({
           results: response.data.records,
-          query: this.props.resultItems.query
-        })
+          query: this.props.resultItems.query,
+        });
         this.setState({
-          itemPage: page
-        })
-      })
+          itemPage: page,
+        });
+        this.props.updateLoading(false);
+      });
   }
 
   /**
    * @method
    */
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
+    const paginationSize = window.innerWidth &lt; 768 ? 'small' : 'large';
     return (
       &lt;Grid container className={classes.root}>
         &lt;Grid item xs={12} className={classes.pagination}>
           &lt;Pagination
+            size={paginationSize}
             showFirstButton
             showLastButton
             count={this.state.totalHits}
@@ -194,7 +198,7 @@ class ResultPagination extends Component {
           />
         &lt;/Grid>
         &lt;Grid item>
-          &lt;ResultItemsList />
+          {this.props.loading.loading ? &lt;CircularProgress /> : &lt;ResultItemsList />}
         &lt;/Grid>
         &lt;Grid item xs={12} className={classes.pagination}>
           &lt;Pagination
@@ -212,9 +216,7 @@ class ResultPagination extends Component {
   }
 }
 
-export default connect(mapStateToProps, { updateResultItems })(
-  withStyles(useStyles)(ResultPagination)
-)
+export default connect(mapStateToProps, { updateResultItems, updateLoading })(withStyles(useStyles)(ResultPagination));
 </code></pre>
         </article>
     </section>

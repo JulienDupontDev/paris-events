@@ -17,7 +17,7 @@ const useStyles = (theme) => ({
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
       width: 'auto'
-    }
+    },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -26,10 +26,10 @@ const useStyles = (theme) => ({
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   inputRoot: {
-    color: 'inherit'
+    color: 'inherit',
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -37,10 +37,10 @@ const useStyles = (theme) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '100ch'
-    }
-  }
-})
+      width: '100ch',
+    },
+  },
+});
 
 /**
  * @class
@@ -72,5 +72,5 @@ class SearchInput extends Component {
   }
 }
 
-export default withStyles(useStyles
-)(SearchInput);
+export default withStyles(useStyles)(SearchInput);
+

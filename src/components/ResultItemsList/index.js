@@ -7,12 +7,12 @@ import {
   Grid,
   Typography,
   withStyles
-} from '@material-ui/core'
-import React, { Component } from 'react'
-import Iframe from 'react-iframe'
-import { connect } from 'react-redux'
-import { getResultItemsList } from '../../redux/selectors'
-import EventDetails from '../eventDetails'
+} from '@material-ui/core';
+import React, { Component } from 'react';
+import Iframe from 'react-iframe';
+import { connect } from 'react-redux';
+import { getResultItemsList } from '../../redux/selectors';
+import EventDetails from '../EventDetails';
 /**
  * Recupères les résultats dans le store redux
  * @param {*} state
@@ -21,25 +21,25 @@ const mapStateToProps = state => {
   const resultItems = getResultItemsList(state)
   return resultItems;
 }
-const useStyles = theme => ({
+const useStyles = (theme) => ({
   root: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   coverImage: {
     objectFit: 'cover',
-    width: '100%'
+    width: '100%',
   },
   itemsContainer: {
     display: 'flex',
     justifyContent: 'center',
     marginTop: '1em',
-    marginBottom: '1em'
+    marginBottom: '1em',
   },
   itemDescription: {
-    overflow: 'hidden'
-  }
-})
+    overflow: 'hidden',
+  },
+});
 
 /**
  * Permet de reformatter la description car les données ne se tranforment pas directement en HTML toutes seules
@@ -47,13 +47,13 @@ const useStyles = theme => ({
  * @param {*} string
  */
 const toHtml = string => {
-  let parser = new DOMParser()
-  let doc = parser.parseFromString(string, 'text/html')
-  let content = doc.body.innerText
+  let parser = new DOMParser();
+  let doc = parser.parseFromString(string, 'text/html');
+  let content = doc.body.innerText;
 
   return content.length < 300
     ? content
-    : content.substring(0, 300).concat('.....')
+    : content.substring(0, 300).concat('.....');
 }
 
 /**
@@ -63,7 +63,7 @@ const toHtml = string => {
  */
 class ResultItemsList extends Component {
   render() {
-    const { classes, resultItems } = this.props
+    const { classes, resultItems } = this.props;
 
     return (
       <Grid container item spacing={2} className={classes.itemsContainer}>
@@ -72,15 +72,16 @@ class ResultItemsList extends Component {
           : resultItems.map(item => {
             return (
               <Grid item xs={10} sm={5} key={item.fields.id}>
-                <Card>
+                <Card style={{ zIndex: 5 }}>
                   <CardActionArea>
                     <CardMedia
                       component='img'
                       alt={item.fields.cover_alt}
                       height='250'
                       image={item.fields.cover_url}
-                      title='Contemplative Reptile'
+                      title={item.fields.cover_alt}
                       className={classes.coverImage}
+
                     />
                     <CardContent>
                       <Typography gutterBottom variant='h5' component='h2'>
@@ -122,8 +123,8 @@ class ResultItemsList extends Component {
             )
           })}
       </Grid>
-    )
+    );
   }
 }
 
-export default connect(mapStateToProps)(withStyles(useStyles)(ResultItemsList))
+export default connect(mapStateToProps,)(withStyles(useStyles)(ResultItemsList));

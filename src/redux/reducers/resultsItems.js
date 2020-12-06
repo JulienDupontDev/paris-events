@@ -19,12 +19,11 @@ const resultItemsReducers = (state = initialState, action) => {
       return {
         query: query,
         resultItems: [
-          ...results
-        ]
+          ...results,
+        ],
       }
     default:
       return state;
   }
 }
-
 export default resultItemsReducers;

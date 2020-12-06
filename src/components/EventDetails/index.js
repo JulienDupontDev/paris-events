@@ -25,7 +25,8 @@ Leaflet.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-})
+});
+
 const useStyles = theme => ({
   appBar: {
     position: 'relative'
@@ -60,7 +61,7 @@ const useStyles = theme => ({
     overflowY: 'auto',
     maxWidth: '200px',
   },
-})
+});
 
 /**
  * @method
@@ -120,7 +121,7 @@ class EventDetails extends Component {
           onClose={this.handleClose}
           TransitionComponent={Transition}
         >
-          <AppBar /*className={classes.appBar}*/>
+          <AppBar>
             <Toolbar>
               <IconButton
                 edge='start'
@@ -139,14 +140,14 @@ class EventDetails extends Component {
                 <Grid item xs={12} sm={10}>
                   <CardMedia src={item.fields.cover_url} component='img' />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={10}>
                   <Typography className={classes.sectionTitle}>
                     Lien de l'évènement
                   </Typography>
                   <Link href={item.fields.url} rel='noreferrer' target='_blank'>{item.fields.url}</Link>
                 </Grid>
                 {item.fields.access_link ?
-                  <Grid item>
+                  <Grid item xs={10}>
                     <Typography className={classes.sectionTitle}>
                       Lien de réservation
                   </Typography>
@@ -239,13 +240,10 @@ class EventDetails extends Component {
                         src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
     &q=${item.fields.address_street} ${item.fields.address_city}&zoom=18`}
                         frameBorder={0}
-                        style={{
-                          border: 0,
-                          width: 'inherit',
-                          height: '300px'
-                        }}
                         ariaHidden={false}
                         allowFullScreen=''
+                        width="100%"
+                        height="400px"
                       />
                     )}
                 </Grid>
@@ -253,13 +251,13 @@ class EventDetails extends Component {
             </Grid>
             <Grid item xs={12} md={6}>
               <Grid container spacing={2} className={classes.containerColumn}>
-                <Grid item>
+                <Grid item xs={12}>
                   <Typography className={classes.sectionTitle}>
                     Chapeau
                   </Typography>
                   <Typography>{item.fields.lead_text}</Typography>
                 </Grid>
-                <Grid item>
+                <Grid item xs={12}>
                   <Typography className={classes.sectionTitle}>
                     Description
                   </Typography>
@@ -304,5 +302,4 @@ class EventDetails extends Component {
     )
   }
 }
-
 export default withStyles(useStyles)(EventDetails);

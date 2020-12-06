@@ -22,38 +22,38 @@
 
     import './styles/iframe.css';
 
-  import Component0 from '../src/components/tableSearch/subComponents/Categories.js';
+  import Component0 from '../src/components/TableSearch/subComponents/Categories.js';
 reactComponents['Categories'] = Component0;
 
-import Component1 from '../src/components/tableSearch/subComponents/Switch.js';
+import Component1 from '../src/components/TableSearch/subComponents/Switch.js';
 reactComponents['CustomSwitch'] = Component1;
 
-import Component2 from '../src/components/tableSearch/subComponents/EventDatePicker.js';
+import Component2 from '../src/components/TableSearch/subComponents/EventDatePicker.js';
 reactComponents['EventDatePicker'] = Component2;
 
-import Component3 from '../src/components/eventDetails/index.js';
+import Component3 from '../src/components/EventDetails/index.js';
 reactComponents['EventDetails'] = Component3;
 
-import Component4 from '../src/components/eventsMap/index.js';
+import Component4 from '../src/components/EventsMap/index.js';
 reactComponents['EventsMap'] = Component4;
 
-import Component5 from '../src/components/home/index.js';
+import Component5 from '../src/components/Home/index.js';
 reactComponents['Home'] = Component5;
 
-import Component6 from '../src/components/navbar/index.js';
+import Component6 from '../src/components/Navbar/index.js';
 reactComponents['Navbar'] = Component6;
 
-import Component7 from '../src/components/resultItemsList/index.js';
+import Component7 from '../src/components/ResultItemsList/index.js';
 reactComponents['ResultItemsList'] = Component7;
 
-import Component8 from '../src/components/pagination/index.js';
+import Component8 from '../src/components/Pagination/index.js';
 reactComponents['ResultPagination'] = Component8;
 
-import Component9 from '../src/components/tableSearch/subComponents/Search.js';
+import Component9 from '../src/components/TableSearch/subComponents/Search.js';
 reactComponents['SearchInput'] = Component9;
 
-import Component10 from '../src/components/tableSearch/subComponents/SimpleSelect.js';
+import Component10 from '../src/components/TableSearch/subComponents/SimpleSelect.js';
 reactComponents['SimpleSelect'] = Component10;
 
-import Component11 from '../src/components/tableSearch/index.js';
+import Component11 from '../src/components/TableSearch/index.js';
 reactComponents['Sorting'] = Component11;

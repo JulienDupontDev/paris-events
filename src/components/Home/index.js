@@ -1,15 +1,14 @@
 import Grid from '@material-ui/core/Grid';
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Sorting from '../tableSearch';
-import ResultPagination from '../pagination';
-import EventsMap from '../eventsMap';
-const useStyle = theme => ({
+import Sorting from '../TableSearch';
+import ResultPagination from '../Pagination';
+import EventsMap from '../EventsMap';
+const useStyle = (theme) => ({
   root: {
     marginTop: "5em",
     overflowX: 'hidden',
   },
-
 });
 
 /**

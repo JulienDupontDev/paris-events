@@ -4,8 +4,8 @@ import {
   FormGroup,
   Grid,
   Switch
-} from '@material-ui/core'
-import React, { Component } from 'react'
+} from '@material-ui/core';
+import React, { Component } from 'react';
 
 /**
  * @class
@@ -15,7 +15,7 @@ import React, { Component } from 'react'
 class CustomSwitch extends Component {
 
   render() {
-    const { value, name, title } = this.props.infos
+    const { value, name, title } = this.props.infos;
     return (
       <Grid item xs={10} sm={4}>
         <FormControl component='fieldset'>
@@ -24,7 +24,8 @@ class CustomSwitch extends Component {
               control={
                 <Switch
                   checked={value === 1}
-                  onChange={() => this.props.update(name, value === 1 ? 0 : 1)}
+                  color="primary"
+                  onChange={() => value === 1 ? this.props.update(name, null) : this.props.update(name, 1)}
                   name={name}
                 />
               }
@@ -36,5 +37,4 @@ class CustomSwitch extends Component {
     )
   }
 }
-
-export default CustomSwitch
+export default CustomSwitch;

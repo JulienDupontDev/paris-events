@@ -1,7 +1,7 @@
 import { UPDATE_NHITS } from '../actionTypes';
 
 const initialState = {
-  nHits: 0
+  nHits: 0,
 }
 /**
  * @method
@@ -15,11 +15,10 @@ const nHitsReducers = (state = initialState, action) => {
       const { nHits } = action.payload;
       return {
         ...state,
-        nHits
+        nHits,
       }
     default:
       return state;
   }
 }
-
 export default nHitsReducers;

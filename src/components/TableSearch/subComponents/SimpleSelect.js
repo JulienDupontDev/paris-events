@@ -13,9 +13,9 @@ import { TextField } from '@material-ui/core';
  */
 class SimpleSelect extends Component {
   render() {
-    const { label, name, values } = this.props.infos
-    const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
-    const checkedIcon = <CheckBoxIcon fontSize='small' />
+    const { label, name, values } = this.props.infos;
+    const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
+    const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
     return (
       <Grid item xs={6} sm={4}>
@@ -49,7 +49,7 @@ class SimpleSelect extends Component {
           )}
         />
       </Grid>
-    )
+    );
   }
 }
 export default SimpleSelect;

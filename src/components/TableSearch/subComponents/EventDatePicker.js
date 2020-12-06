@@ -4,7 +4,8 @@ import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider
 } from '@material-ui/pickers';
-import { Grid } from '@material-ui/core';
+import { Grid, IconButton } from '@material-ui/core';
+import { Clear } from '@material-ui/icons';
 
 /**
  * @class
@@ -29,10 +30,20 @@ class EventDatePicker extends Component {
             format='dd/MM/yyyy'
             lang='fr'
             minDate={this.initialDate}
-            value={(new Date(date.value))}
+            value={date.value !== null ? (new Date(date.value)) : new Date()}
             onChange={this.checkDate}
             KeyboardButtonProps={{
               'aria-label': 'change date'
+            }}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={() => this.checkDate(null)}>
+                  <Clear />
+                </IconButton>
+              )
+            }}
+            InputAdornmentProps={{
+              position: "start"
             }}
           />
         </MuiPickersUtilsProvider>
@@ -46,6 +57,9 @@ class EventDatePicker extends Component {
    * @param {date} date 
    */
   checkDate = (date) => {
+    if (date === null) {
+      this.props.update(null);
+    }
     if (Object.prototype.toString.call(date) === "[object Date]") {
       if (!isNaN(date.getTime())) {
         this.props.update(date);
