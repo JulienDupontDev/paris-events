@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> components/home/index.js</title>
+  <title> components/Home/index.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getNhits">getNhits</a></li><li><a href="global.html#getNhitsState">getNhitsState</a></li><li><a href="global.html#getResultItemsList">getResultItemsList</a></li><li><a href="global.html#getResultItemsState">getResultItemsState</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#nHitsReducers">nHitsReducers</a></li><li><a href="global.html#resultItemsReducers">resultItemsReducers</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getLoading">getLoading</a></li><li><a href="global.html#getLoadingState">getLoadingState</a></li><li><a href="global.html#getNhits">getNhits</a></li><li><a href="global.html#getNhitsState">getNhitsState</a></li><li><a href="global.html#getResultItemsList">getResultItemsList</a></li><li><a href="global.html#getResultItemsState">getResultItemsState</a></li><li><a href="global.html#loadingReducer">loadingReducer</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#nHitsReducers">nHitsReducers</a></li><li><a href="global.html#resultItemsReducers">resultItemsReducers</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li><li><a href="global.html#updateLoading">updateLoading</a></li><li><a href="global.html#updateNHits">updateNHits</a></li><li><a href="global.html#updateResultItems">updateResultItems</a></li></ul></div>
                 
             </nav>
         </div>
@@ -80,7 +80,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>components/home/index.js</h1>
+                    <h1>components/Home/index.js</h1>
                 </header>
                 
 
@@ -92,15 +92,14 @@
             <pre class="prettyprint source linenums"><code>import Grid from '@material-ui/core/Grid';
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Sorting from '../tableSearch';
-import ResultPagination from '../pagination';
-import EventsMap from '../eventsMap';
-const useStyle = theme => ({
+import Sorting from '../TableSearch';
+import ResultPagination from '../Pagination';
+import EventsMap from '../EventsMap';
+const useStyle = (theme) => ({
   root: {
     marginTop: "5em",
     overflowX: 'hidden',
   },
-
 });
 
 /**
@@ -124,7 +123,8 @@ class Home extends Component {
     );
   };
 }
-export default withStyles(useStyle)(Home);</code></pre>
+export default withStyles(useStyle)(Home);
+</code></pre>
         </article>
     </section>
 

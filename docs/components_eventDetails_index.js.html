@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> components/eventDetails/index.js</title>
+  <title> components/EventDetails/index.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -72,7 +72,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getNhits">getNhits</a></li><li><a href="global.html#getNhitsState">getNhitsState</a></li><li><a href="global.html#getResultItemsList">getResultItemsList</a></li><li><a href="global.html#getResultItemsState">getResultItemsState</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#nHitsReducers">nHitsReducers</a></li><li><a href="global.html#resultItemsReducers">resultItemsReducers</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Components</h3><ul><li><a href="Categories.html">Categories</a></li><li><a href="CustomSwitch.html">CustomSwitch</a></li><li><a href="EventDatePicker.html">EventDatePicker</a></li><li><a href="EventDetails.html">EventDetails</a></li><li><a href="EventsMap.html">EventsMap</a></li><li><a href="Home.html">Home</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ResultItemsList.html">ResultItemsList</a></li><li><a href="ResultPagination.html">ResultPagination</a></li><li><a href="SearchInput.html">SearchInput</a></li><li><a href="SimpleSelect.html">SimpleSelect</a></li><li><a href="Sorting.html">Sorting</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getLoading">getLoading</a></li><li><a href="global.html#getLoadingState">getLoadingState</a></li><li><a href="global.html#getNhits">getNhits</a></li><li><a href="global.html#getNhitsState">getNhitsState</a></li><li><a href="global.html#getResultItemsList">getResultItemsList</a></li><li><a href="global.html#getResultItemsState">getResultItemsState</a></li><li><a href="global.html#loadingReducer">loadingReducer</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li><li><a href="global.html#nHitsReducers">nHitsReducers</a></li><li><a href="global.html#resultItemsReducers">resultItemsReducers</a></li><li><a href="global.html#ScrollTop">ScrollTop</a></li><li><a href="global.html#toHtml">toHtml</a></li><li><a href="global.html#updateLoading">updateLoading</a></li><li><a href="global.html#updateNHits">updateNHits</a></li><li><a href="global.html#updateResultItems">updateResultItems</a></li></ul></div>
                 
             </nav>
         </div>
@@ -80,7 +80,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>components/eventDetails/index.js</h1>
+                    <h1>components/EventDetails/index.js</h1>
                 </header>
                 
 
@@ -116,7 +116,8 @@ Leaflet.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-})
+});
+
 const useStyles = theme => ({
   appBar: {
     position: 'relative'
@@ -151,7 +152,7 @@ const useStyles = theme => ({
     overflowY: 'auto',
     maxWidth: '200px',
   },
-})
+});
 
 /**
  * @method
@@ -211,7 +212,7 @@ class EventDetails extends Component {
           onClose={this.handleClose}
           TransitionComponent={Transition}
         >
-          &lt;AppBar /*className={classes.appBar}*/>
+          &lt;AppBar>
             &lt;Toolbar>
               &lt;IconButton
                 edge='start'
@@ -230,14 +231,14 @@ class EventDetails extends Component {
                 &lt;Grid item xs={12} sm={10}>
                   &lt;CardMedia src={item.fields.cover_url} component='img' />
                 &lt;/Grid>
-                &lt;Grid item xs={8}>
+                &lt;Grid item xs={10}>
                   &lt;Typography className={classes.sectionTitle}>
                     Lien de l'évènement
                   &lt;/Typography>
                   &lt;Link href={item.fields.url} rel='noreferrer' target='_blank'>{item.fields.url}&lt;/Link>
                 &lt;/Grid>
                 {item.fields.access_link ?
-                  &lt;Grid item>
+                  &lt;Grid item xs={10}>
                     &lt;Typography className={classes.sectionTitle}>
                       Lien de réservation
                   &lt;/Typography>
@@ -330,13 +331,10 @@ class EventDetails extends Component {
                         src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBEjR01uRc1-BrUPZB2TFtRebrQv7FCnuM
     &amp;q=${item.fields.address_street} ${item.fields.address_city}&amp;zoom=18`}
                         frameBorder={0}
-                        style={{
-                          border: 0,
-                          width: 'inherit',
-                          height: '300px'
-                        }}
                         ariaHidden={false}
                         allowFullScreen=''
+                        width="100%"
+                        height="400px"
                       />
                     )}
                 &lt;/Grid>
@@ -344,13 +342,13 @@ class EventDetails extends Component {
             &lt;/Grid>
             &lt;Grid item xs={12} md={6}>
               &lt;Grid container spacing={2} className={classes.containerColumn}>
-                &lt;Grid item>
+                &lt;Grid item xs={12}>
                   &lt;Typography className={classes.sectionTitle}>
                     Chapeau
                   &lt;/Typography>
                   &lt;Typography>{item.fields.lead_text}&lt;/Typography>
                 &lt;/Grid>
-                &lt;Grid item>
+                &lt;Grid item xs={12}>
                   &lt;Typography className={classes.sectionTitle}>
                     Description
                   &lt;/Typography>
@@ -395,7 +393,6 @@ class EventDetails extends Component {
     )
   }
 }
-
 export default withStyles(useStyles)(EventDetails);
 </code></pre>
         </article>
